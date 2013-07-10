@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mainlayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:contentDescription="@string/background"
+        android:scaleType="fitCenter"
+        android:src="@drawable/background" />
+
+     <RelativeLayout
+         android:id="@+id/movietitle"
+         android:layout_width="wrap_content"
+         android:layout_height="100dp"
+         android:layout_alignParentLeft="true"
+         android:layout_alignParentRight="true"
+         android:layout_marginTop="70dp" >
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:contentDescription="@string/background"
+            android:scaleType="fitXY"
+            android:src="@drawable/bg_moviename" />
+
+        <TextView
+            android:id="@+id/_name"
+            style="@style/MovieMaster.MovieTitle"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="23dp"
+            android:gravity="center" />
+
+    </RelativeLayout>
+    
+    <Spinner
+        android:id="@+id/favSpinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="false"
+        android:layout_centerInParent="false"
+        android:layout_centerVertical="false" />
+
+    <Button
+        android:id="@+id/addFavButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/favSpinner"
+        android:background="@android:color/holo_orange_dark"
+        android:padding="10dp"
+        android:text="@string/add_to_favorites"
+        android:textColor="@android:color/white" />
+
+    <GridLayout
+        android:id="@+id/movieData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/movietitle"
+        android:columnCount="2"
+        android:padding="10dip" >
+
+        <TextView
+            style="@style/MovieMaster.MovieLabel"
+            android:text="@string/critics_rating" />
+
+        <TextView
+            android:id="@+id/_rating"
+            style="@style/MovieMaster.MovieInfo" />
+
+        <TextView
+            style="@style/MovieMaster.MovieLabel"
+            android:text="@string/year" />
+
+        <TextView
+            android:id="@+id/_year"
+            style="@style/MovieMaster.MovieInfo" />
+
+        <TextView
+            style="@style/MovieMaster.MovieLabel"
+            android:text="@string/rating" />
+
+        <TextView
+            android:id="@+id/_mpaa"
+            style="@style/MovieMaster.MovieInfo" />
+
+        <TextView
+            style="@style/MovieMaster.MovieLabel"
+            android:text="@string/synopsis" />
+    </GridLayout>
+
+    <TextView
+        android:id="@+id/_synopsis"
+        style="@style/MovieMaster.MovieInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/movieData"
+        android:paddingRight="10dp" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:text="@string/movie_planner" />
+
+
+</RelativeLayout>

@@ -30,6 +30,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -105,6 +106,18 @@ public class MainActivity extends Activity {
 								.getWindowToken(), 0);
 				// CLEAR OUT ALL FIELDS
 				clearFields(false);
+			}
+		});
+		
+		// VIEW LATEST MOVIES BUTTON AND HANDLER
+		Button latestButton = (Button) findViewById(R.id.viewLatest);
+		latestButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Log.i("LATEST BUTTON", "LATEST BUTTON CLICKED");
+				Intent intent = new Intent(MainActivity.this, MoviesActivity.class);
+				MainActivity.this.startActivity(intent);
+				MainActivity.this.finish();
 			}
 		});
 

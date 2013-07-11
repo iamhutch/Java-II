@@ -11,21 +11,22 @@ public class MoviesSingletonClass {
 	private String _movies;
 	
 	
-	protected MoviesSingletonClass() {
-		
-	}
-	
 	/**********************
 	 * Private Methods
 	 **********************/
+	// Used to hide constructor and prevent other classes from instantiating
+	protected MoviesSingletonClass() {
+	}
 	
 	/**********************
 	 * Public method
 	 **********************/
 	public static MoviesSingletonClass getInstance() {
+		// Create a new instantiation if there isn't one
 		if(_instance == null){
 			_instance = new MoviesSingletonClass();
 		}
+		// Otherwise, just return the one already created
 		return _instance;
 	}
 	

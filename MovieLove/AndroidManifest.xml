@@ -32,6 +32,7 @@
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" android:screenOrientation="portrait">
         </activity>
         <activity android:name="favorites"></activity>
+        <activity android:name="com.lucyhutcheson.movielove.MoviesActivity"></activity>
     </application>
 
 </manifest>

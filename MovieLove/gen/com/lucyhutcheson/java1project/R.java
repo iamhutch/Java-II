@@ -28,29 +28,33 @@ public final class R {
         public static final int splash=0x7f020003;
     }
     public static final class id {
-        public static final int _mpaa=0x7f08000a;
+        public static final int _mpaa=0x7f080009;
         public static final int _name=0x7f080004;
-        public static final int _rating=0x7f080008;
-        public static final int _synopsis=0x7f08000b;
-        public static final int _year=0x7f080009;
-        public static final int action_settings=0x7f080011;
-        public static final int addFavButton=0x7f080006;
-        public static final int clearButton=0x7f080010;
+        public static final int _rating=0x7f080007;
+        public static final int _synopsis=0x7f08000a;
+        public static final int _year=0x7f080008;
+        public static final int action_settings=0x7f080012;
+        public static final int activity_list_btn=0x01010000;
+        public static final int addFavButton=0x7f08000c;
+        public static final int clearButton=0x7f080011;
         public static final int favSpinner=0x7f080005;
         public static final int imageView1=0x7f080001;
         public static final int imageView2=0x7f080003;
-        public static final int linearLayout1=0x7f08000d;
+        public static final int linearLayout1=0x7f08000e;
         public static final int mainlayout=0x7f080000;
-        public static final int movieData=0x7f080007;
+        public static final int movieData=0x7f080006;
         public static final int movietitle=0x7f080002;
-        public static final int searchButton=0x7f08000f;
-        public static final int searchField=0x7f08000e;
-        public static final int textView1=0x7f08000c;
+        public static final int searchButton=0x7f080010;
+        public static final int searchField=0x7f08000f;
+        public static final int textView1=0x7f08000b;
+        public static final int viewLatest=0x7f08000d;
     }
     public static final class layout {
         public static final int form=0x7f030000;
-        public static final int searchform=0x7f030001;
-        public static final int splash=0x7f030002;
+        public static final int latestmovieslist=0x7f030001;
+        public static final int latestmoviestextview=0x7f030002;
+        public static final int searchform=0x7f030003;
+        public static final int splash=0x7f030004;
     }
     public static final class menu {
         public static final int main=0x7f070000;
@@ -59,6 +63,7 @@ public final class R {
         public static final int action_settings=0x7f050001;
         public static final int add_to_favorites=0x7f05000a;
         public static final int app_name=0x7f050000;
+        public static final int back_to_main_view=0x7f050015;
         public static final int background=0x7f05000d;
         public static final int clear_screen=0x7f05000b;
         public static final int critics_rating=0x7f050007;
@@ -67,6 +72,7 @@ public final class R {
         public static final int favs=0x7f050005;
         public static final int go=0x7f050004;
         public static final int hello_world=0x7f050002;
+        public static final int latest_movies=0x7f050016;
         public static final int movie_name=0x7f050006;
         public static final int movie_planner=0x7f050013;
         public static final int rating=0x7f050009;
@@ -75,6 +81,7 @@ public final class R {
         public static final int title_section1=0x7f05000e;
         public static final int title_section2=0x7f05000f;
         public static final int view_favorites=0x7f050012;
+        public static final int view_latest=0x7f050014;
         public static final int year=0x7f050008;
     }
     public static final class style {

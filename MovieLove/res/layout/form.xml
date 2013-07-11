@@ -13,13 +13,13 @@
         android:scaleType="fitCenter"
         android:src="@drawable/background" />
 
-     <RelativeLayout
-         android:id="@+id/movietitle"
-         android:layout_width="wrap_content"
-         android:layout_height="100dp"
-         android:layout_alignParentLeft="true"
-         android:layout_alignParentRight="true"
-         android:layout_marginTop="70dp" >
+    <RelativeLayout
+        android:id="@+id/movietitle"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="110dp" >
 
         <ImageView
             android:id="@+id/imageView2"
@@ -36,9 +36,8 @@
             android:layout_height="50dp"
             android:layout_marginTop="23dp"
             android:gravity="center" />
-
     </RelativeLayout>
-    
+
     <Spinner
         android:id="@+id/favSpinner"
         android:layout_width="fill_parent"
@@ -47,16 +46,6 @@
         android:layout_alignParentLeft="false"
         android:layout_centerInParent="false"
         android:layout_centerVertical="false" />
-
-    <Button
-        android:id="@+id/addFavButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/favSpinner"
-        android:background="@android:color/holo_orange_dark"
-        android:padding="10dp"
-        android:text="@string/add_to_favorites"
-        android:textColor="@android:color/white" />
 
     <GridLayout
         android:id="@+id/movieData"
@@ -109,10 +98,30 @@
         android:id="@+id/textView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="false"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="35dp" 
         android:gravity="center"
         android:text="@string/movie_planner" />
 
+    <Button
+        android:id="@+id/addFavButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/favSpinner"
+        android:layout_alignParentLeft="true"
+        android:background="@android:color/holo_orange_dark"
+        android:padding="5dp"
+        android:text="@string/add_to_favorites"
+        android:textColor="@android:color/white" />
+
+    <Button
+        android:id="@+id/viewLatest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/darker_gray"
+        android:padding="5dp"
+        android:text="@string/view_latest"
+        android:textColor="@android:color/white" />
 
 </RelativeLayout>

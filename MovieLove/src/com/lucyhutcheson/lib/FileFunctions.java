@@ -1,3 +1,13 @@
+/*
+ * project		MovieLove
+ * 
+ * package		com.lucyhutcheson.lib
+ * 
+ * @author		Lucy Hutcheson
+ * 
+ * date			Jul 11, 2013
+ * 
+ */
 package com.lucyhutcheson.lib;
 
 import java.io.BufferedInputStream;
@@ -12,8 +22,20 @@ import java.io.ObjectOutputStream;
 import android.content.Context;
 import android.util.Log;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class FileFunctions.
+ */
 public class FileFunctions {
-	// FUNCTION TO SAVE STRINGS
+	/**
+	 * Function to save strings to file.
+	 *
+	 * @param context the context
+	 * @param filename the filename
+	 * @param content the content
+	 * @param external the external
+	 * @return the boolean
+	 */
 	public static Boolean storeStringFile(Context context, String filename, String content, Boolean external) {
 		try {
 			File file;
@@ -36,7 +58,15 @@ public class FileFunctions {
 		return true;
 		
 	}
-	// FUNCTION TO SAVE OBJECTS 
+	/**
+	 * Store object file.
+	 *
+	 * @param context the context
+	 * @param filename the filename
+	 * @param content the content
+	 * @param external the external
+	 * @return the boolean
+	 */
 	public static Boolean storeObjectFile(Context context, String filename, Object content, Boolean external) {
 		try {
 			File file;
@@ -62,6 +92,14 @@ public class FileFunctions {
 		return true;
 	}
 	
+	/**
+	 * Read string file.
+	 *
+	 * @param context the context
+	 * @param filename the filename
+	 * @param external the external
+	 * @return the string
+	 */
 	public static String readStringFile(Context context, String filename, Boolean external) {
 		String content = "";
 		try {
@@ -96,6 +134,14 @@ public class FileFunctions {
 		return content;
 	}
 	
+	/**
+	 * Read object file.
+	 *
+	 * @param context the context
+	 * @param filename the filename
+	 * @param external the external
+	 * @return the object
+	 */
 	public static Object readObjectFile(Context context, String filename, Boolean external) {
 		Object content = new Object();
 		try {

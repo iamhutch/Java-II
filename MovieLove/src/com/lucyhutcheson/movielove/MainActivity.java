@@ -20,7 +20,7 @@ import java.util.HashMap;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.lucyhutcheson.java1project.R;
+import com.lucyhutcheson.lib.DownloadService;
 import com.lucyhutcheson.lib.FileFunctions;
 import com.lucyhutcheson.lib.WebConnections;
 
@@ -47,10 +47,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
 
+/**
+ * The Class MainActivity which provides access to the search form to search for
+ * new movies as well as view any favorite movies that have been saved.
+ */
 public class MainActivity extends Activity {
 
 	// SETUP VARIABLES FOR CLASS
-	Context _context;
+	static Context _context;
 	Boolean _connected = false;
 	HashMap<String, String> _favorites;
 	String _temp;
@@ -59,6 +63,12 @@ public class MainActivity extends Activity {
 	ArrayList<String> _movies = new ArrayList<String>();
 	HashMap<String, String> favList = new HashMap<String, String>();
 
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -108,16 +118,16 @@ public class MainActivity extends Activity {
 				clearFields(false);
 			}
 		});
-		
+
 		// VIEW LATEST MOVIES BUTTON AND HANDLER
 		Button latestButton = (Button) findViewById(R.id.viewLatest);
 		latestButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Log.i("LATEST BUTTON", "LATEST BUTTON CLICKED");
-				Intent intent = new Intent(MainActivity.this, MoviesActivity.class);
-				MainActivity.this.startActivity(intent);
-				MainActivity.this.finish();
+				Intent intent = new Intent(MainActivity.this, DownloadService.class);
+				startService(intent);
+
 			}
 		});
 
@@ -211,7 +221,9 @@ public class MainActivity extends Activity {
 		listAdapter.notifyDataSetChanged();
 	}
 
-	// UPDATE OUR SAVED ARRAYLIST WITH MOVIES
+	/**
+	 * Update the saved arraylist with movies.
+	 */
 	public void updateSaved() {
 		favList = getFavorites();
 		_movies.removeAll(_movies);
@@ -220,6 +232,11 @@ public class MainActivity extends Activity {
 		_list.setSelection(0);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -227,7 +244,12 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
-	// CLEAR OUT OUR FIELDS
+	/**
+	 * Clear out the edit fields and text views for future use.
+	 * 
+	 * @param clearTemp
+	 *            the clear temp
+	 */
 	private void clearFields(Boolean clearTemp) {
 		((EditText) findViewById(R.id.searchField)).setText("");
 		((TextView) findViewById(R.id._name)).setText("");
@@ -241,7 +263,14 @@ public class MainActivity extends Activity {
 		_list.setSelection(0);
 	}
 
-	// SETUP URL AND GET MOVIE DATA
+	/**
+	 * Constructs the URL used to search for the movie based on the movie name
+	 * string passed in.
+	 * 
+	 * @param movie
+	 *            string passed in from form
+	 * @return movie data result
+	 */
 	private void getMovie(String movie) {
 		String baseURL = "http://api.rottentomatoes.com/api/public/v1.0/movies.json?apikey=bcqq9h5yxut6nm9qz77h3w3h&page_limit=5&q=";
 		String mqs = movie; // MAKE SURE THAT MY MOVIE STRING IS ENCODED
@@ -272,8 +301,13 @@ public class MainActivity extends Activity {
 			toast.show();
 		}
 	}
-	
-	// GET FAVORITES FUNCTION
+
+	/**
+	 * Function to get read the favorites file which contains any movie data
+	 * that was saved as a favorite.
+	 * 
+	 * @return hashmap of our favorites data
+	 */
 	@SuppressWarnings("unchecked")
 	private HashMap<String, String> getFavorites() {
 		Object stored = FileFunctions.readObjectFile(_context, "favorites",
@@ -294,8 +328,12 @@ public class MainActivity extends Activity {
 		return favorites;
 	}
 
-	// GET OUR TEMP STRING FROM STORAGE
-	// TEMP STRING HOLDS THE MOST RECENT SEARCHED FOR MOVIE
+	/**
+	 * Gets our temp string from the storage and returns it. The temp string
+	 * contains JSON data from the most recent searched-for movie.
+	 * 
+	 * @return string of our movie data
+	 */
 	private String getTemp() {
 		Object tempStored = FileFunctions
 				.readStringFile(_context, "temp", true);
@@ -314,9 +352,16 @@ public class MainActivity extends Activity {
 		return temp;
 	}
 
-	// SETUP MOVIEREQUEST TO HANDLE URL
-	private class MovieRequest extends AsyncTask<URL, Void, String> {
+	/**
+	 * Class to handle and validate the URL for the movie request.
+	 */
+	public class MovieRequest extends AsyncTask<URL, Void, String> {
 
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see android.os.AsyncTask#doInBackground(Params[])
+		 */
 		@Override
 		protected String doInBackground(URL... urls) {
 			String response = "";
@@ -326,6 +371,11 @@ public class MainActivity extends Activity {
 			return response;
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+		 */
 		@Override
 		protected void onPostExecute(String result) {
 			Log.i("URL RESPONSE", result);
@@ -348,7 +398,12 @@ public class MainActivity extends Activity {
 			}
 		}
 
-		// UPDATE TEXTVIEWS WITH JSON DATA
+		/**
+		 * Updates all textviews with selected movie JSON data.
+		 * 
+		 * @param data
+		 *            the data
+		 */
 		public void updateData(JSONObject data) {
 			try {
 				((TextView) findViewById(R.id._name)).setText(data

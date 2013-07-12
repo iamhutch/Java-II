@@ -125,8 +125,10 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				Log.i("LATEST BUTTON", "LATEST BUTTON CLICKED");
+				// INTENT TO START MAIN ACTIVITY
 				Intent intent = new Intent(MainActivity.this, DownloadService.class);
-				startService(intent);
+				MainActivity.this.startActivity(intent);
+				MainActivity.this.finish();
 
 			}
 		});

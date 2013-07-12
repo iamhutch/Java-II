@@ -36,11 +36,7 @@ import android.widget.AdapterView.OnItemClickListener;
  * a list of the latest movies when initiated by the user from the main activity.
  */
 public class MoviesActivity extends ListActivity {
-	
-	static final String[] FRUITS = new String[] { "Apple", "Avocado", "Banana",
-		"Blueberry", "Coconut", "Durian", "Guava", "Kiwifruit",
-		"Jackfruit", "Mango", "Olive", "Pear", "Sugar-apple" };
-	
+		
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
@@ -49,9 +45,13 @@ public class MoviesActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		Log.i("LATEST MOVIE", "LATEST MOVIE ACTIVITY STARTED");
 		setContentView(R.layout.latestmovieslist);
+
 		
 	}
 	
+	/**
+	 * Display data.
+	 */
 	public void displayData(){
 		MoviesSingletonClass _Movies = MoviesSingletonClass.getInstance();
 
@@ -92,7 +92,6 @@ public class MoviesActivity extends ListActivity {
 			});
 
 		} catch (JSONException e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		
@@ -103,7 +102,7 @@ public class MoviesActivity extends ListActivity {
 	 *
 	 * @param button the button
 	 */
-	public void addRowBtn(View button){
+	public void backButton(View button){
 	    Intent intent = new Intent(this, MainActivity.class);
 	    startActivity(intent);
 	} 

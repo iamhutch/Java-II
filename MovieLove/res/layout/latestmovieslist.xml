@@ -31,7 +31,7 @@
         android:id="@+android:id/activity_list_btn"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:onClick="addRowBtn"
+        android:onClick="backButton"
         android:text="@string/back_to_main_view" />
 
 </LinearLayout>

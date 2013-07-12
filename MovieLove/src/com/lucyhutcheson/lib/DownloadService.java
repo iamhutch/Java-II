@@ -15,6 +15,8 @@ import java.net.URL;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.lucyhutcheson.movielove.MoviesActivity;
+
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
@@ -24,20 +26,19 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+// TODO: Auto-generated Javadoc
 /**
  * IntentService to handle downloading the latest movies from the rotten tomatoes api.
  * To be used for the latest movies view.
  */
 public class DownloadService extends IntentService {
 
-	Context _context;
 	/**
 	 * Instantiates a new download service.
 	 *           
 	 */
 	public DownloadService() {
 		super("DownloadService");
-		// TODO Auto-generated constructor stub
 	}
 
 	/*
@@ -47,7 +48,7 @@ public class DownloadService extends IntentService {
 	 */
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		Log.d("ONHANDLEINTENT", "I'M IN ONHANDLEINTENT");
+		Log.i("DOWNLOAD SERVICE", "DOWNLOAD SERVICE STARTED");
 		String baseURL = "http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?apikey=bcqq9h5yxut6nm9qz77h3w3h";
 		URL finalURL;
 		ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -63,7 +64,7 @@ public class DownloadService extends IntentService {
 				finalURL = null;
 			}
 		} else {
-			Toast toast = Toast.makeText(_context, "No network detected.",
+			Toast toast = Toast.makeText(getApplicationContext(), "No network detected.",
 					Toast.LENGTH_SHORT);
 			toast.show();
 		}
@@ -99,7 +100,7 @@ public class DownloadService extends IntentService {
 			try {
 				JSONObject json = new JSONObject(result);
 				if (json.getString("total").compareTo("0") == 0) {
-					Toast toast = Toast.makeText(_context, "Movies Not Found",
+					Toast toast = Toast.makeText(getApplicationContext(), "Movies Not Found",
 							Toast.LENGTH_SHORT);
 					toast.show();
 				} else {
@@ -107,11 +108,9 @@ public class DownloadService extends IntentService {
 					MoviesSingletonClass mMovies = MoviesSingletonClass.getInstance();
 					mMovies.set_movies(json.toString());
 					// Launch the movies activity screen
-					//Intent intent = new Intent(DownloadService.this, MoviesActivity.class);
-					//DownloadService.this.startActivity(intent);
-					//Intent intent = new Intent(); 
-					//intent.setClassName("com.lucyhutcheson.movielove", "com.lucyhutcheson.movielove.MoviesActivity"); 
-					//startActivity(intent);
+					Intent intent = new Intent(DownloadService.this, MoviesActivity.class);
+					DownloadService.this.startActivity(intent);
+
 
 
 				}

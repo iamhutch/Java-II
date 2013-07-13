@@ -20,7 +20,6 @@ import java.util.HashMap;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.lucyhutcheson.lib.DownloadService;
 import com.lucyhutcheson.lib.FileFunctions;
 import com.lucyhutcheson.lib.WebConnections;
 
@@ -126,7 +125,7 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				Log.i("LATEST BUTTON", "LATEST BUTTON CLICKED");
 				// INTENT TO START MAIN ACTIVITY
-				Intent intent = new Intent(MainActivity.this, DownloadService.class);
+				Intent intent = new Intent(MainActivity.this, MoviesActivity.class);
 				MainActivity.this.startActivity(intent);
 				MainActivity.this.finish();
 

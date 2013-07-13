@@ -17,11 +17,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.lucyhutcheson.lib.DownloadService;
 import com.lucyhutcheson.lib.MoviesSingletonClass;
 
+import android.annotation.SuppressLint;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Messenger;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -35,8 +41,12 @@ import android.widget.AdapterView.OnItemClickListener;
  * The Class MoviesActivity provides the view controller for the page that will contain
  * a list of the latest movies when initiated by the user from the main activity.
  */
+@SuppressLint("HandlerLeak")
 public class MoviesActivity extends ListActivity {
 		
+	// Setup variables
+	Context context = this;
+	
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
@@ -45,7 +55,22 @@ public class MoviesActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		Log.i("LATEST MOVIE", "LATEST MOVIE ACTIVITY STARTED");
 		setContentView(R.layout.latestmovieslist);
-
+		Handler dataServiceHandler = new Handler() {
+			public void handleMessage(Message mymessage){
+				if (mymessage.arg1 == RESULT_OK && mymessage.obj != null){
+					try {
+						Log.i("RESPONSE", mymessage.obj.toString());
+					} catch (Exception e) {
+						Log.e("ERROR", e.toString());
+					}
+				}
+			}
+		};
+		
+		Messenger messenger = new Messenger(dataServiceHandler);
+		Intent startServiceIntent = new Intent(context, DownloadService.class);
+		startServiceIntent.putExtra(DownloadService.MESSENGER_KEY, messenger);
+		startService(startServiceIntent);
 		
 	}
 	

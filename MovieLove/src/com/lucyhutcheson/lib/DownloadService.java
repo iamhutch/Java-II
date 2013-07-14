@@ -120,7 +120,6 @@ public class DownloadService extends IntentService {
 			
 			// Convert result to JSONObject and send to MoviesSingletonClass
 			try {
-				Log.i("POST EXECUTE", "TRYING");
 
 				JSONObject json = new JSONObject(result);
 				if (json.getString("total").compareTo("0") == 0) {
@@ -129,18 +128,14 @@ public class DownloadService extends IntentService {
 							Toast.LENGTH_SHORT);
 					toast.show();
 				} else {
-					Log.i("JSON TOTAL", "YES MOVIES FOUND");
 					// Instantiate my singleton and save the json result
 					MoviesSingletonClass mMovies = MoviesSingletonClass.getInstance();
-					Log.i("SINGLETON", "SINGLETON INSTANTIATED");
 					mMovies.set_movies(json.toString());
-					Log.i("JSON", "MOVING ONTO MESSAGE");
 					
 					message.arg1 = Activity.RESULT_OK;
 					message.obj = "Service completed";
 					
 					try {
-						Log.i("MESSENGER", "SENDING MESSAGE");
 						messenger.send(message);
 					} catch (RemoteException e) {
 						Log.i("MESSENGER", "ERROR SENDING MESSAGE");

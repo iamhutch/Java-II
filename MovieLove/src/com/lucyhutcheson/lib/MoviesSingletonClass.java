@@ -10,8 +10,6 @@
  */
 package com.lucyhutcheson.lib;
 
-import android.util.Log;
-
 /**
  * Singleton to hold the searched-for movie JSON data as well as the latest movies
  * JSON data when initiated by the user in the main activity.
@@ -70,9 +68,7 @@ public class MoviesSingletonClass {
 	 */
 
 	public void set_movies(String string) {
-		Log.i("SINGLETON SET MOVIES", "SETTING MOVIES WITH: " + string);
 		this._movies = string;
-		
 	}
 	
 }

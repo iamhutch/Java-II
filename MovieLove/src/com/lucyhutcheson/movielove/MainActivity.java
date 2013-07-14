@@ -144,7 +144,6 @@ public class MainActivity extends Activity {
 					clearFields(true);
 
 					_temp = getTemp();
-					Log.i("TEMP READ", _temp);
 					try {
 						JSONObject results = new JSONObject(_temp);
 						_favorites.put(results.getString("title"),
@@ -323,7 +322,6 @@ public class MainActivity extends Activity {
 		// IF OBJECT EXISTS, BRING IN DATA AND ADD TO HASHMAP
 		else {
 			// CAST HASHMAP
-			Log.i("FAVORITES", "FAVORITES FILE FOUND");
 			favorites = (HashMap<String, String>) stored;
 		}
 		return favorites;
@@ -347,7 +345,6 @@ public class MainActivity extends Activity {
 		// IF OBJECT EXISTS, BRING IN DATA AND ADD TO HASHMAP
 		else {
 			// CAST HASHMAP
-			Log.i("TEMP", "TEMP FILE FOUND");
 			temp = (String) tempStored;
 		}
 		return temp;

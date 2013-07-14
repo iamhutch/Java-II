@@ -12,10 +12,7 @@ package com.lucyhutcheson.lib;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.lucyhutcheson.movielove.MoviesActivity;
 
 import android.app.Activity;
 import android.app.IntentService;
@@ -104,6 +101,7 @@ public class DownloadService extends IntentService {
 				try {
 					response = WebConnections.getURLStringResponse(url);
 				} catch (Exception e) {
+					response = null;
 					message.arg1 = Activity.RESULT_CANCELED;
 					Log.e("ERROR", e.toString());
 					e.printStackTrace();
@@ -119,36 +117,41 @@ public class DownloadService extends IntentService {
 		 */
 		@Override
 		protected void onPostExecute(String result) {
-			Log.i("URL RESPONSE", result);
 			
 			// Convert result to JSONObject and send to MoviesSingletonClass
 			try {
+				Log.i("POST EXECUTE", "TRYING");
+
 				JSONObject json = new JSONObject(result);
 				if (json.getString("total").compareTo("0") == 0) {
+					Log.i("JSON TOTAL", "NO MOVIES FOUND");
 					Toast toast = Toast.makeText(getApplicationContext(), "Movies Not Found",
 							Toast.LENGTH_SHORT);
 					toast.show();
 				} else {
+					Log.i("JSON TOTAL", "YES MOVIES FOUND");
 					// Instantiate my singleton and save the json result
 					MoviesSingletonClass mMovies = MoviesSingletonClass.getInstance();
+					Log.i("SINGLETON", "SINGLETON INSTANTIATED");
 					mMovies.set_movies(json.toString());
+					Log.i("JSON", "MOVING ONTO MESSAGE");
 					
 					message.arg1 = Activity.RESULT_OK;
 					message.obj = "Service completed";
 					
 					try {
+						Log.i("MESSENGER", "SENDING MESSAGE");
 						messenger.send(message);
 					} catch (RemoteException e) {
+						Log.i("MESSENGER", "ERROR SENDING MESSAGE");
 						e.printStackTrace();
 					}
-					// Launch the movies activity screen
-					Intent intent = new Intent(DownloadService.this, MoviesActivity.class);
-					DownloadService.this.startActivity(intent);
+
 				}
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				message.arg1 = Activity.RESULT_CANCELED;
 				message.obj = "Service completed";
-				Log.e("JSON", "JSON OBJECT EXCEPTION");
+				Log.e("ERROR", e.toString());
 				e.printStackTrace();
 			}
 		}

@@ -19,6 +19,11 @@
             android:textSize="20sp" />
     </LinearLayout>
 
+    <TextView 
+        android:id="@+id/waiting_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/waiting_for_movie_data" />
     <ListView
         android:id="@+android:id/list"
         android:layout_width="fill_parent"

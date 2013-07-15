@@ -61,8 +61,10 @@ public class MainActivity extends Activity {
 	Spinner _list;
 	ArrayList<String> _movies = new ArrayList<String>();
 	HashMap<String, String> favList = new HashMap<String, String>();
+	public static final String FAV_FILENAME = "favorites";
+	public static final String TEMP_FILENAME = "temp";
 
-
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -148,7 +150,7 @@ public class MainActivity extends Activity {
 						JSONObject results = new JSONObject(_temp);
 						_favorites.put(results.getString("title"),
 								results.toString());
-						FileFunctions.storeObjectFile(_context, "favorites",
+						FileFunctions.storeObjectFile(_context, FAV_FILENAME,
 								_favorites, false);
 						// ALERT USER OF SUCCESSFUL SAVE
 						Toast toast = Toast.makeText(_context,
@@ -335,7 +337,7 @@ public class MainActivity extends Activity {
 	 */
 	private String getTemp() {
 		Object tempStored = FileFunctions
-				.readStringFile(_context, "temp", true);
+				.readStringFile(_context, TEMP_FILENAME, true);
 		String temp = null;
 
 		// CHECK IF OBJECT EXISTS

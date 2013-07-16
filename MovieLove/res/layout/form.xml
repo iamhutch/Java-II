@@ -119,7 +119,7 @@
         android:id="@+id/viewLatest"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/darker_gray"
+        android:background="@android:color/holo_red_dark"
         android:padding="5dp"
         android:text="@string/view_latest"
         android:textColor="@android:color/white" />

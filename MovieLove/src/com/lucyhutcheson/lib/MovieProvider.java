@@ -15,8 +15,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.lucyhutcheson.movielove.MoviesActivity;
-
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
@@ -38,9 +36,9 @@ public class MovieProvider extends ContentProvider {
 		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.dgardinier.museum.item";
 
 		// Define Columns
-		public static final String MOVIE_COLUMN = "movie";
-		public static final String YEAR_COLUMN = "year";
-		public static final String RATING_COLUMN = "rating";
+		public static final String MOVIE_COLUMN = "TITLE";
+		public static final String YEAR_COLUMN = "YEAR";
+		public static final String RATING_COLUMN = "RATING";
 
 		public static final String[] PROJECTION = { "_Id", MOVIE_COLUMN,
 				YEAR_COLUMN, RATING_COLUMN };

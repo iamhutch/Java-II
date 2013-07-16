@@ -1,36 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/holo_red_dark" >
+        android:background="@android:color/black"
+        android:padding="10dp" >
 
         <TextView
+            android:id="@+id/latestmoviesheader"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
+            android:layout_height="fill_parent"
             android:text="@string/latest_movies"
-            android:textColor="@android:color/white"
             android:textSize="20sp" />
     </LinearLayout>
+    <!-- Header -->
 
-    <TextView 
-        android:id="@+id/waiting_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/waiting_for_movie_data" />
-    <ListView
-        android:id="@+android:id/list"
+    <LinearLayout
+        android:id="@+id/header"
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:choiceMode="multipleChoice" >
-    </ListView>
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_red_dark"
+        android:padding="10dp" >
+
+        <TextView
+            android:id="@+id/movietitle"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="@string/title"
+            android:width="450dp" />
+
+        <TextView
+            android:id="@+id/year"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="@string/year"
+            android:width="80dp" />
+
+        <TextView
+            android:id="@+id/rating"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="@string/rating"
+            android:width="80dp" />
+    </LinearLayout>
+
+    <!-- List Divider -->
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:background="?android:attr/listDivider" />
+
+    <!-- ListView (latestmovies_row) -->
+
+    <LinearLayout
+        android:id="@+id/layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp" >
+
+        <ListView
+            android:id="@+id/listview"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+        </ListView>
+    </LinearLayout>
 
     <Button
         android:id="@+android:id/activity_list_btn"

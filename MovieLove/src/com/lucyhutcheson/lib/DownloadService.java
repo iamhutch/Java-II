@@ -14,8 +14,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import org.json.JSONObject;
 
-import com.lucyhutcheson.movielove.MoviesActivity;
-
 import android.app.Activity;
 import android.app.IntentService;
 import android.content.Context;
@@ -59,7 +57,7 @@ public class DownloadService extends IntentService {
 	protected void onHandleIntent(Intent intent) {
 		Log.i("DOWNLOAD SERVICE", "DOWNLOAD SERVICE STARTED");
 		
-		//String baseURL = "http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?apikey=bcqq9h5yxut6nm9qz77h3w3h";
+		String baseURL = "http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?apikey=bcqq9h5yxut6nm9qz77h3w3h";
 		URL finalURL;
 		Bundle extras = intent.getExtras();
 		messenger = (Messenger) extras.get(MESSENGER_KEY);
@@ -71,7 +69,7 @@ public class DownloadService extends IntentService {
 		if (networkInfo != null && networkInfo.isConnected()) {
 			try {
 				// SETUP MY URL AND REQUEST IT
-				finalURL = new URL(MoviesActivity.latestMoviesUrl);
+				finalURL = new URL(baseURL);
 				MovieRequest qr = new MovieRequest();
 				qr.execute(finalURL);
 			} catch (MalformedURLException e) {

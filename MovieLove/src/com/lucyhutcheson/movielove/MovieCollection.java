@@ -17,6 +17,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 public class MovieCollection extends Activity implements OnClickListener {
@@ -73,11 +74,23 @@ public class MovieCollection extends Activity implements OnClickListener {
 		listView = (ListView) findViewById(R.id.listview);
 		listHeader = getLayoutInflater().inflate(R.layout.latestmovies_header, null);
 		listView.addHeaderView(listHeader);
-		
+
+		String[] from = new String[] { "Title", "Year", "Rating" };
+		int[] to = new int[] { R.id.movietitle, R.id.year, R.id.rating };
+
 		if (savedInstanceState != null) {
 			Log.d(TAG, "Saved Instance");
 			
-			myList = (ArrayList<HashMap<String,String>>) savedInstanceState.getSerializable("Saved");
+			myList = (ArrayList<HashMap<String,String>>) savedInstanceState.getSerializable("saved");
+			if (myList != null) {
+				SimpleAdapter adapter = new SimpleAdapter(this, myList, R.layout.latestmovies_row, from, to);
+				listView.setAdapter(adapter);
+			}
+			else {
+				Log.d("MOVIECOLLECTION", "Saved is NULL");
+			}
+		} else {
+			
 		}
 
 	}

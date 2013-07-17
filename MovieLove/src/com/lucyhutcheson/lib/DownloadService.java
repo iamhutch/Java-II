@@ -33,13 +33,14 @@ import android.widget.Toast;
  */
 public class DownloadService extends IntentService {
 
+	Context context = this;
 	public static String JSON_MOVIES = "movies";
 	public static String JSON_TITLE = "title";
 	public static final String MESSENGER_KEY = "messenger";
 	Messenger messenger;
 	Message message;
 	public static final String LATESTMOVIES_URL = "http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?apikey=bcqq9h5yxut6nm9qz77h3w3h";
-
+	
 	/**
 	 * Instantiates a new download service.
 	 * 
@@ -95,6 +96,15 @@ public class DownloadService extends IntentService {
 								.getInstance();
 						mMovies.set_movies(json.toString());
 						
+						try {
+							// SAVE THE DATA TO OUR TEMP FILE FOR INCLUSION IN FAVORITES IF SELECTED BY USER
+							FileFunctions.storeStringFile(this, "latest", json.toString(), true);
+
+						} catch (Exception e) {
+							Log.e("DOWNLOAD SERVICE", "SAVING LATEST ERROR");
+							e.printStackTrace();
+						}
+
 						// SETUP OUR MESSAGE AND SEND
 						message.arg1 = Activity.RESULT_OK;
 						message.obj = "Service completed";
@@ -104,7 +114,6 @@ public class DownloadService extends IntentService {
 							Log.i("MESSENGER", "ERROR SENDING MESSAGE");
 							e.printStackTrace();
 						}
-
 					}
 				} catch (Exception e) {
 					message.arg1 = Activity.RESULT_CANCELED;
@@ -127,7 +136,6 @@ public class DownloadService extends IntentService {
 					"No network detected.", Toast.LENGTH_SHORT);
 			toast.show();
 		}
-
 	}
 
 }

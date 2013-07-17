@@ -101,7 +101,7 @@ public class MovieProvider extends ContentProvider {
 		
 		MatrixCursor result = new MatrixCursor(MovieData.PROJECTION);
 		
-		String JSONString = FileFunctions.readStringFile(getContext(), "providers", false);
+		String JSONString = FileFunctions.readStringFile(getContext(), "latest", false);
 		JSONObject movie = null;
 		JSONArray movieArray = null;
 		JSONObject field = null;

@@ -72,9 +72,7 @@ public class MainActivity extends Activity {
 
 			if (mymessage.arg1 == RESULT_OK	&& mymessage.obj != null) {
 				Log.i("RESPONSE", mymessage.obj.toString());
-				Toast.makeText(MainActivity.this,
-						"Movie Found", Toast.LENGTH_LONG)
-						.show();
+				Toast.makeText(MainActivity.this,"Movie Found", Toast.LENGTH_LONG).show();
 				JSONObject json = null;
 				try {
 					json = new JSONObject(mymessage.obj.toString());
@@ -85,9 +83,7 @@ public class MainActivity extends Activity {
 				Log.i("UPDATE WITH JSON", json.toString());
 				updateData(json);
 			} else {
-				Toast.makeText(MainActivity.this,
-						"Download failed.", Toast.LENGTH_LONG)
-						.show();
+				Toast.makeText(MainActivity.this,"Download failed.", Toast.LENGTH_LONG).show();
 			}
 		}
 
@@ -111,8 +107,7 @@ public class MainActivity extends Activity {
 		_temp = getTemp();
 		// INFLATE THE SEARCH FORM AND ADD TO THE CURRENT VIEW
 		RelativeLayout layout = (RelativeLayout) findViewById(R.id.mainlayout);
-		LayoutInflater inflater = (LayoutInflater) this
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View view = inflater.inflate(R.layout.searchform, layout, false);
 		layout.addView(view);
 
@@ -127,18 +122,12 @@ public class MainActivity extends Activity {
 				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(_searchField.getWindowToken(), 0);
 
-
-
 				// GET SEARCHED FOR MOVIE INFORMATION
 				Messenger messenger = new Messenger(searchServiceHandler);
-				Intent startServiceIntent = new Intent(getApplicationContext(),
-						GetDataService.class);
-				startServiceIntent.putExtra(GetDataService.MESSENGER_KEY,
-						messenger);
-				startServiceIntent.putExtra(GetDataService.SEARCH_KEY,
-						_searchField.getText().toString());
-				startServiceIntent.setData(Uri
-						.parse("http://api.rottentomatoes.com/api/public/v1.0/movies.json?apikey=bcqq9h5yxut6nm9qz77h3w3h&page_limit=5&q="
+				Intent startServiceIntent = new Intent(getApplicationContext(),GetDataService.class);
+				startServiceIntent.putExtra(GetDataService.MESSENGER_KEY,messenger);
+				startServiceIntent.putExtra(GetDataService.SEARCH_KEY,_searchField.getText().toString());
+				startServiceIntent.setData(Uri.parse("http://api.rottentomatoes.com/api/public/v1.0/movies.json?apikey=bcqq9h5yxut6nm9qz77h3w3h&page_limit=5&q="
 								+ _searchField.getText().toString()));
 				startService(startServiceIntent);
 
@@ -152,9 +141,8 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				// DISMISS THE KEYBOARD SO WE CAN SEE OUR TEXT
 				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-				imm.hideSoftInputFromWindow(
-						((EditText) findViewById(R.id.searchField))
-								.getWindowToken(), 0);
+				imm.hideSoftInputFromWindow(((EditText) findViewById(R.id.searchField)).getWindowToken(), 0);
+				
 				// CLEAR OUT ALL FIELDS
 				clearFields(false);
 			}
@@ -167,8 +155,7 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				Log.i("LATEST BUTTON", "LATEST BUTTON CLICKED");
 				// INTENT TO START MAIN ACTIVITY
-				Intent intent = new Intent(MainActivity.this,
-						MoviesActivity.class);
+				Intent intent = new Intent(MainActivity.this,MoviesActivity.class);
 				MainActivity.this.startActivity(intent);
 				MainActivity.this.finish();
 
@@ -189,14 +176,10 @@ public class MainActivity extends Activity {
 					_temp = getTemp();
 					try {
 						JSONObject results = new JSONObject(_temp);
-						_favorites.put(results.getString("title"),
-								results.toString());
-						FileFunctions.storeObjectFile(_context, FAV_FILENAME,
-								_favorites, false);
+						_favorites.put(results.getString("title"), results.toString());
+						FileFunctions.storeObjectFile(_context, FAV_FILENAME, _favorites, false);
 						// ALERT USER OF SUCCESSFUL SAVE
-						Toast toast = Toast.makeText(_context,
-								"Movie successfully added to favorites.",
-								Toast.LENGTH_SHORT);
+						Toast toast = Toast.makeText(_context,"Movie successfully added to favorites.",	Toast.LENGTH_SHORT);
 						toast.show();
 						_temp = "";
 					} catch (JSONException e) {
@@ -236,17 +219,11 @@ public class MainActivity extends Activity {
 					try {
 						json = new JSONObject(selected);
 						// GET DATA AND DISPLAY ON SCREEN
-						((TextView) findViewById(R.id._name)).setText(json
-								.getString("title"));
-						((TextView) findViewById(R.id._rating)).setText(json
-								.getJSONObject("ratings").getString(
-										"critics_score"));
-						((TextView) findViewById(R.id._year)).setText(json
-								.getString("year"));
-						((TextView) findViewById(R.id._mpaa)).setText(json
-								.getString("mpaa_rating"));
-						((TextView) findViewById(R.id._synopsis)).setText(json
-								.getString("critics_consensus"));
+						((TextView) findViewById(R.id._name)).setText(json.getString("title"));
+						((TextView) findViewById(R.id._rating)).setText(json.getJSONObject("ratings").getString("critics_score"));
+						((TextView) findViewById(R.id._year)).setText(json.getString("year"));
+						((TextView) findViewById(R.id._mpaa)).setText(json.getString("mpaa_rating"));
+						((TextView) findViewById(R.id._synopsis)).setText(json.getString("critics_consensus"));
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}

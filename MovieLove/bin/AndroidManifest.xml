@@ -43,6 +43,7 @@
 
         <service android:name="com.lucyhutcheson.lib.GetDataService" >
         </service>
+        <provider android:exported="false" android:name="com.lucyhutcheson.lib.MovieProvider" android:authorities="com.lucyhutcheson.lib.MovieProvider"></provider>
     </application>
 
 </manifest>

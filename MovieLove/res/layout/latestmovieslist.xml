@@ -18,37 +18,8 @@
             android:text="@string/latest_movies"
             android:textSize="20sp" />
     </LinearLayout>
-    <!-- Header -->
 
-    <LinearLayout
-        android:id="@+id/header"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/holo_red_dark"
-        android:padding="10dp" >
 
-        <TextView
-            android:id="@+id/movietitle"
-            android:layout_width="0dip"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:text="@string/title"
-            android:width="450dp" />
-
-        <TextView
-            android:id="@+id/year"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:text="@string/year"
-            android:width="80dp" />
-
-        <TextView
-            android:id="@+id/rating"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:text="@string/rating"
-            android:width="80dp" />
-    </LinearLayout>
 
     <!-- List Divider -->
 
@@ -78,5 +49,5 @@
         android:layout_height="wrap_content"
         android:onClick="backButton"
         android:text="@string/back_to_main_view" />
-
+    
 </LinearLayout>

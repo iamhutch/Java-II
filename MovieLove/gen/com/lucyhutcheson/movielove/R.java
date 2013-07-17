@@ -33,39 +33,38 @@ public final class R {
         public static final int _rating=0x7f080007;
         public static final int _synopsis=0x7f08000a;
         public static final int _year=0x7f080008;
-        public static final int action_settings=0x7f08001c;
+        public static final int action_settings=0x7f08001a;
         public static final int activity_list_btn=0x01010000;
         public static final int addFavButton=0x7f08000c;
-        public static final int clearButton=0x7f08001b;
+        public static final int clearButton=0x7f080019;
         public static final int favSpinner=0x7f080005;
-        public static final int header=0x7f080015;
+        public static final int header=0x7f08000e;
         public static final int imageView1=0x7f080001;
         public static final int imageView2=0x7f080003;
-        public static final int latestmoviesheader=0x7f080014;
-        public static final int layout=0x7f080016;
+        public static final int latestmoviesheader=0x7f080012;
+        public static final int layout=0x7f080013;
         public static final int linearLayout1=0x7f080018;
-        public static final int listview=0x7f080017;
-        public static final int main=0x7f080013;
+        public static final int listview=0x7f080014;
+        public static final int main=0x7f080011;
         public static final int mainlayout=0x7f080000;
+        public static final int movieCollectorLayout=0x7f080015;
         public static final int movieData=0x7f080006;
-        public static final int movie_header=0x7f08000e;
         public static final int movietitle=0x7f080002;
-        public static final int rating=0x7f080012;
-        public static final int rating_header=0x7f080010;
-        public static final int searchButton=0x7f08001a;
-        public static final int searchField=0x7f080019;
+        public static final int rating=0x7f080010;
+        public static final int searchButton=0x7f080017;
+        public static final int searchField=0x7f080016;
         public static final int textView1=0x7f08000b;
         public static final int viewLatest=0x7f08000d;
-        public static final int year=0x7f080011;
-        public static final int year_header=0x7f08000f;
+        public static final int year=0x7f08000f;
     }
     public static final class layout {
         public static final int form=0x7f030000;
         public static final int latestmovies_header=0x7f030001;
         public static final int latestmovies_row=0x7f030002;
         public static final int latestmovieslist=0x7f030003;
-        public static final int searchform=0x7f030004;
-        public static final int splash=0x7f030005;
+        public static final int moviecollector=0x7f030004;
+        public static final int searchform=0x7f030005;
+        public static final int splash=0x7f030006;
     }
     public static final class menu {
         public static final int main=0x7f070000;

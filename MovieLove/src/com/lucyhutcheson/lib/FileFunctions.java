@@ -51,6 +51,8 @@ public class FileFunctions {
 			}
 			// WRITE/SAVE OUR DATA AND THEN CLOSE OUT THE STREAM
 			fos.write(content.getBytes());
+			Log.i("WRITE STRING", "SUCCESSFUL");
+
 			fos.close();
 		} catch (IOException e){
 			Log.e("WRITE ERROR", filename);

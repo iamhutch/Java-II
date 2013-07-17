@@ -12,7 +12,6 @@ package com.lucyhutcheson.movielove;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -59,19 +58,16 @@ public class MoviesActivity extends Activity {
 
 		Log.i("ACTIVITY STARTED", "MoviesActivity has started.");
 
+		// Setup our content view
 		this.setContentView(R.layout.latestmovieslist);
-
-		Log.i("MOVIESACTIVITY", "setContentView");
-
 		listView = (ListView) findViewById(R.id.listview);
-		View listHeader = this.getLayoutInflater().inflate(
-				R.layout.latestmovies_header, null);
+		View listHeader = this.getLayoutInflater().inflate(R.layout.latestmovies_header, null);
 		listView.addHeaderView(listHeader);
 
+		// Handle communication between this activity and DownloadService class
 		Handler dataServiceHandler = new Handler() {
 
 			public void handleMessage(Message mymessage) {
-				Log.i("HANDLER", "handleMessage");
 
 				if (mymessage.arg1 == RESULT_OK && mymessage.obj != null) {
 					try {
@@ -134,7 +130,6 @@ public class MoviesActivity extends Activity {
 				displayMap.put("Rating", mpaa_rating);
 
 				movieArrayList.add(displayMap);
-				Log.i("DISPLAYMAP", movieArrayList.toString());
 			}
 
 			SimpleAdapter adapter = new SimpleAdapter(this, movieArrayList,
@@ -148,7 +143,7 @@ public class MoviesActivity extends Activity {
 	}
 
 	/**
-	 * Adds the row btn.
+	 * Back button intent
 	 * 
 	 * @param button
 	 *            the button
@@ -157,5 +152,6 @@ public class MoviesActivity extends Activity {
 		Intent intent = new Intent(this, MainActivity.class);
 		startActivity(intent);
 	}
+	
 
 }

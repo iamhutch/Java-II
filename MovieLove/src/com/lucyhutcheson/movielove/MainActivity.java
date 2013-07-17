@@ -11,9 +11,6 @@
 
 package com.lucyhutcheson.movielove;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -21,12 +18,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.lucyhutcheson.lib.FileFunctions;
-import com.lucyhutcheson.lib.WebConnections;
-
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.AsyncTask;
+import com.lucyhutcheson.lib.GetDataService;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Messenger;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -50,6 +48,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
  * The Class MainActivity which provides access to the search form to search for
  * new movies as well as view any favorite movies that have been saved.
  */
+@SuppressLint("HandlerLeak")
 public class MainActivity extends Activity {
 
 	// SETUP VARIABLES FOR CLASS
@@ -64,6 +63,35 @@ public class MainActivity extends Activity {
 	public static final String FAV_FILENAME = "favorites";
 	public static final String TEMP_FILENAME = "temp";
 
+	// Handle communication between this activity and
+	// GetDataService class
+	Handler searchServiceHandler = new Handler() {
+
+		public void handleMessage(Message mymessage) {
+			//Object resultObject = mymessage.obj;
+
+			if (mymessage.arg1 == RESULT_OK	&& mymessage.obj != null) {
+				Log.i("RESPONSE", mymessage.obj.toString());
+				Toast.makeText(MainActivity.this,
+						"Movie Found", Toast.LENGTH_LONG)
+						.show();
+				JSONObject json = null;
+				try {
+					json = new JSONObject(mymessage.obj.toString());
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				Log.i("UPDATE WITH JSON", json.toString());
+				updateData(json);
+			} else {
+				Toast.makeText(MainActivity.this,
+						"Download failed.", Toast.LENGTH_LONG)
+						.show();
+			}
+		}
+
+	};
 	
 	/*
 	 * (non-Javadoc)
@@ -81,7 +109,6 @@ public class MainActivity extends Activity {
 		_context = this;
 		_favorites = getFavorites();
 		_temp = getTemp();
-
 		// INFLATE THE SEARCH FORM AND ADD TO THE CURRENT VIEW
 		RelativeLayout layout = (RelativeLayout) findViewById(R.id.mainlayout);
 		LayoutInflater inflater = (LayoutInflater) this
@@ -100,8 +127,21 @@ public class MainActivity extends Activity {
 				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(_searchField.getWindowToken(), 0);
 
-				// GET MOVIE INFORMATION
-				getMovie(_searchField.getText().toString());
+
+
+				// GET SEARCHED FOR MOVIE INFORMATION
+				Messenger messenger = new Messenger(searchServiceHandler);
+				Intent startServiceIntent = new Intent(getApplicationContext(),
+						GetDataService.class);
+				startServiceIntent.putExtra(GetDataService.MESSENGER_KEY,
+						messenger);
+				startServiceIntent.putExtra(GetDataService.SEARCH_KEY,
+						_searchField.getText().toString());
+				startServiceIntent.setData(Uri
+						.parse("http://api.rottentomatoes.com/api/public/v1.0/movies.json?apikey=bcqq9h5yxut6nm9qz77h3w3h&page_limit=5&q="
+								+ _searchField.getText().toString()));
+				startService(startServiceIntent);
+
 			}
 		});
 
@@ -127,7 +167,8 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				Log.i("LATEST BUTTON", "LATEST BUTTON CLICKED");
 				// INTENT TO START MAIN ACTIVITY
-				Intent intent = new Intent(MainActivity.this, MoviesActivity.class);
+				Intent intent = new Intent(MainActivity.this,
+						MoviesActivity.class);
 				MainActivity.this.startActivity(intent);
 				MainActivity.this.finish();
 
@@ -266,45 +307,6 @@ public class MainActivity extends Activity {
 	}
 
 	/**
-	 * Constructs the URL used to search for the movie based on the movie name
-	 * string passed in.
-	 * 
-	 * @param movie
-	 *            string passed in from form
-	 * @return movie data result
-	 */
-	private void getMovie(String movie) {
-		String baseURL = "http://api.rottentomatoes.com/api/public/v1.0/movies.json?apikey=bcqq9h5yxut6nm9qz77h3w3h&page_limit=5&q=";
-		String mqs = movie; // MAKE SURE THAT MY MOVIE STRING IS ENCODED
-		String qs;
-		try {
-			// ENCODE MY MOVIE STRING
-			qs = URLEncoder.encode(mqs, "UTF-8");
-		} catch (Exception e) {
-			Log.e("BAD URL", "ENCODING PROBLEM");
-			qs = "";
-		}
-		URL finalURL;
-		ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-		if (networkInfo != null && networkInfo.isConnected()) {
-			try {
-				// SETUP MY URL AND REQUEST IT
-				finalURL = new URL(baseURL + qs);
-				MovieRequest qr = new MovieRequest();
-				qr.execute(finalURL);
-			} catch (MalformedURLException e) {
-				Log.e("BAD URL", "MALFORMED URL");
-				finalURL = null;
-			}
-		} else {
-			Toast toast = Toast.makeText(_context, "No network detected.",
-					Toast.LENGTH_SHORT);
-			toast.show();
-		}
-	}
-
-	/**
 	 * Function to get read the favorites file which contains any movie data
 	 * that was saved as a favorite.
 	 * 
@@ -336,8 +338,8 @@ public class MainActivity extends Activity {
 	 * @return string of our movie data
 	 */
 	private String getTemp() {
-		Object tempStored = FileFunctions
-				.readStringFile(_context, TEMP_FILENAME, true);
+		Object tempStored = FileFunctions.readStringFile(_context,
+				TEMP_FILENAME, true);
 		String temp = null;
 
 		// CHECK IF OBJECT EXISTS
@@ -353,75 +355,28 @@ public class MainActivity extends Activity {
 	}
 
 	/**
-	 * Class to handle and validate the URL for the movie request.
+	 * Updates all textviews with selected movie JSON data.
+	 * 
+	 * @param data
+	 *            the data
 	 */
-	public class MovieRequest extends AsyncTask<URL, Void, String> {
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see android.os.AsyncTask#doInBackground(Params[])
-		 */
-		@Override
-		protected String doInBackground(URL... urls) {
-			String response = "";
-			for (URL url : urls) {
-				response = WebConnections.getURLStringResponse(url);
-			}
-			return response;
+	public void updateData(JSONObject data) {
+		Log.i("UPDATE DATA", data.toString());
+		try {
+			((TextView) findViewById(R.id._name)).setText(data
+					.getString("title"));
+			((TextView) findViewById(R.id._rating)).setText(data.getJSONObject(
+					"ratings").getString("critics_score"));
+			((TextView) findViewById(R.id._year)).setText(data
+					.getString("year"));
+			((TextView) findViewById(R.id._mpaa)).setText(data
+					.getString("mpaa_rating"));
+			((TextView) findViewById(R.id._synopsis)).setText(data
+					.getString("critics_consensus"));
+		} catch (JSONException e) {
+			e.printStackTrace();
+			Log.e("JSON ERROR", e.toString());
 		}
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
-		 */
-		@Override
-		protected void onPostExecute(String result) {
-			Log.i("URL RESPONSE", result);
-			try {
-				JSONObject json = new JSONObject(result);
-				if (json.getString("total").compareTo("0") == 0) {
-					Toast toast = Toast.makeText(_context, "Movie Not Found",
-							Toast.LENGTH_SHORT);
-					toast.show();
-				} else {
-					JSONObject results = json.getJSONArray("movies")
-							.getJSONObject(0);
-					FileFunctions.storeStringFile(_context, "temp",
-							results.toString(), true);
-					updateData(results);
-				}
-			} catch (JSONException e) {
-				Log.e("JSON", "JSON OBJECT EXCEPTION");
-				e.printStackTrace();
-			}
-		}
-
-		/**
-		 * Updates all textviews with selected movie JSON data.
-		 * 
-		 * @param data
-		 *            the data
-		 */
-		public void updateData(JSONObject data) {
-			try {
-				((TextView) findViewById(R.id._name)).setText(data
-						.getString("title"));
-				((TextView) findViewById(R.id._rating)).setText(data
-						.getJSONObject("ratings").getString("critics_score"));
-				((TextView) findViewById(R.id._year)).setText(data
-						.getString("year"));
-				((TextView) findViewById(R.id._mpaa)).setText(data
-						.getString("mpaa_rating"));
-				((TextView) findViewById(R.id._synopsis)).setText(data
-						.getString("critics_consensus"));
-			} catch (JSONException e) {
-				e.printStackTrace();
-				Log.e("JSON ERROR", e.toString());
-			}
-		}
-
 	}
 
 }

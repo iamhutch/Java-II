@@ -47,11 +47,13 @@ public class WebConnections {
 	// Open the URL connection and execute using the URL parameter passed in
 	public static String getURLStringResponse(URL url){
 		String response = "";
+        Log.i("WEBCONNECTIONS", "GETURLSTRINGRESPONSE");
 		
 		try {
 			// Open connection
 			URLConnection conn = url.openConnection();  // open a connection first
 			BufferedInputStream bin = new BufferedInputStream(conn.getInputStream());
+	        Log.i("OPEN CONNECTION", "TRYING");
 			
 			// Execute request
 			byte[] contentBytes = new byte[1024];

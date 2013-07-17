@@ -28,24 +28,24 @@ import android.util.Log;
 import android.widget.Toast;
 
 /**
- * IntentService to handle downloading the latest movies from the rotten
- * tomatoes api. To be used for the latest movies view.
+ * IntentService to handle downloading the latest movies from the rotten tomatoes api.
+ * To be used for the latest movies view.
  */
-public class DownloadService extends IntentService {
-
+public class GetDataService extends IntentService {
+	
 	public static String JSON_MOVIES = "movies";
 	public static String JSON_TITLE = "title";
+	public static final String SEARCH_KEY = "search";
 	public static final String MESSENGER_KEY = "messenger";
 	Messenger messenger;
 	Message message;
-	public static final String LATESTMOVIES_URL = "http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?apikey=bcqq9h5yxut6nm9qz77h3w3h";
 
 	/**
 	 * Instantiates a new download service.
-	 * 
+	 *           
 	 */
-	public DownloadService() {
-		super("DownloadService");
+	public GetDataService() {
+		super("GetDataService");
 	}
 
 	/*
@@ -55,22 +55,24 @@ public class DownloadService extends IntentService {
 	 */
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		Log.i("DOWNLOAD SERVICE", "DOWNLOAD SERVICE STARTED");
-
+		Log.i("GETDATA SERVICE", "GETDATA SERVICE STARTED");
+		
+        String localUrlString = intent.getDataString();
+        Log.i("GETDATA SERVICE", localUrlString);
 		Bundle extras = intent.getExtras();
 		messenger = (Messenger) extras.get(MESSENGER_KEY);
 		message = Message.obtain();
 
 		// SETUP OUR URL TO QUERY
 		URL localURL = null;
-		try {
-			localURL = new URL(LATESTMOVIES_URL);
+        try {
+			localURL = new URL(localUrlString);
 		} catch (MalformedURLException e1) {
 			Log.e("ERROR", e1.toString());
 			e1.printStackTrace();
 		}
-
-		// CHECK OUR NETWORK CONNECTION
+        
+        // CHECK OUR NETWORK CONNECTION
 		ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
@@ -78,33 +80,33 @@ public class DownloadService extends IntentService {
 		if (networkInfo != null && networkInfo.isConnected()) {
 			String response = "";
 			try {
-				// QUERY MY URL
 				response = WebConnections.getURLStringResponse(localURL);
+
 				try {
-					// GET MY RESPONSE
+					// GET OUR JSON RESPONSE
 					JSONObject json = new JSONObject(response);
+					
 					// NO RESPONSE RECEIVED
 					if (json.getString("total").compareTo("0") == 0) {
-						Log.i("JSON TOTAL", "NO MOVIES FOUND");
-						Toast toast = Toast.makeText(getApplicationContext(),
-								"Movies Not Found", Toast.LENGTH_SHORT);
+						Toast toast = Toast.makeText(getApplicationContext(), "Movies Not Found",
+								Toast.LENGTH_SHORT);
 						toast.show();
 					} else {
-						// INSTANTIATE MY SINGLETON AND SAVE MY RESULT
-						MoviesSingletonClass mMovies = MoviesSingletonClass
-								.getInstance();
-						mMovies.set_movies(json.toString());
+						// GET OUR DATA FROM THE JSON ARRAY
+						JSONObject results = json.getJSONArray("movies").getJSONObject(0);
+						
+						// SAVE THE DATA TO OUR TEMP FILE FOR INCLUSION IN FAVORITES IF SELECTED BY USER
+						FileFunctions.storeStringFile(getApplicationContext(), "temp", results.toString(), true);
 						
 						// SETUP OUR MESSAGE AND SEND
 						message.arg1 = Activity.RESULT_OK;
-						message.obj = "Service completed";
+						message.obj = results;
 						try {
 							messenger.send(message);
 						} catch (RemoteException e) {
 							Log.i("MESSENGER", "ERROR SENDING MESSAGE");
 							e.printStackTrace();
 						}
-
 					}
 				} catch (Exception e) {
 					message.arg1 = Activity.RESULT_CANCELED;
@@ -119,15 +121,15 @@ public class DownloadService extends IntentService {
 				e.printStackTrace();
 				localURL = null;
 			}
-		}
+
+		} 
 		// No network connection available
 		else {
 			message.arg1 = Activity.RESULT_CANCELED;
-			Toast toast = Toast.makeText(getApplicationContext(),
-					"No network detected.", Toast.LENGTH_SHORT);
+			Toast toast = Toast.makeText(getApplicationContext(), "No network detected.",
+					Toast.LENGTH_SHORT);
 			toast.show();
 		}
 
 	}
-
 }

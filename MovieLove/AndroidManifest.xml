@@ -40,7 +40,9 @@
 
         <service android:name="com.lucyhutcheson.lib.DownloadService" >
         </service>
-        <provider android:name="com.lucyhutcheson.lib.MovieProvider" android:authorities="com.lucyhutcheson.movielove.movieprovider" android:exported="true"></provider>
+
+        <service android:name="com.lucyhutcheson.lib.GetDataService" >
+        </service>
     </application>
 
 </manifest>

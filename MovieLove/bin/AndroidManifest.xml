@@ -35,15 +35,21 @@
         </activity>
         <activity android:name="favorites" >
         </activity>
-        <activity android:name="com.lucyhutcheson.movielove.MoviesActivity" >
+        <activity
+            android:name="com.lucyhutcheson.movielove.MoviesActivity"
+            android:windowSoftInputMode="stateHidden" >
         </activity>
 
         <service android:name="com.lucyhutcheson.lib.DownloadService" >
         </service>
-
         <service android:name="com.lucyhutcheson.lib.GetDataService" >
         </service>
-        <provider android:exported="false" android:name="com.lucyhutcheson.lib.MovieProvider" android:authorities="com.lucyhutcheson.lib.MovieProvider"></provider>
+
+        <provider
+            android:name="com.lucyhutcheson.lib.MovieProvider"
+            android:authorities="com.lucyhutcheson.lib.MovieProvider"
+            android:exported="false" >
+        </provider>
     </application>
 
 </manifest>

@@ -52,7 +52,8 @@ public class MoviesActivity extends Activity implements OnClickListener {
 	String[] from = new String[] { "Title", "Year", "Rating" };
 	int[] to = new int[] { R.id.movietitle, R.id.year, R.id.rating };
 	SimpleAdapter adapter;
-
+	ArrayList<HashMap<String, String>> movieArrayList;
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -78,7 +79,6 @@ public class MoviesActivity extends Activity implements OnClickListener {
 		// SEARCH BUTTON AND HANDLER
 		searchButton = (Button) this.findViewById(R.id.searchButton);
 		searchButton.setOnClickListener(this);
-
 	}
 
 	/**
@@ -92,8 +92,8 @@ public class MoviesActivity extends Activity implements OnClickListener {
 		startActivity(intent);
 	}
 
-	public void onClick(View v) {
-		
+	
+	public void onClick(View v) {	
 		// DISMISS THE KEYBOARD SO WE CAN SEE OUR TEXT
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(editURI.getWindowToken(), 0);
@@ -113,12 +113,12 @@ public class MoviesActivity extends Activity implements OnClickListener {
 					}
 
 					MovieProvider provider = new MovieProvider();
-					Cursor myCursor = provider.query(Uri.parse(editURI.getText().toString()),MovieProvider.MovieData.PROJECTION, null, null,	"ASC");
+					Cursor myCursor = provider.query(Uri.parse(editURI.getText().toString()),MovieProvider.MovieData.PROJECTION, null, null,"ASC");
 					if (myCursor != null) {
 						int count = myCursor.getCount();
 						Log.i("CURSOR", String.valueOf(count));
 						if (count > 0) {
-							ArrayList<HashMap<String, String>> movieArrayList = new ArrayList<HashMap<String, String>>();
+							movieArrayList = new ArrayList<HashMap<String, String>>();
 
 							while (myCursor.moveToNext()) {
 								HashMap<String, String> displayMap = new HashMap<String, String>();
@@ -152,5 +152,53 @@ public class MoviesActivity extends Activity implements OnClickListener {
 		startServiceIntent.putExtra(DownloadService.MESSENGER_KEY, messenger);
 		startService(startServiceIntent);
 	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		Log.i("ONSAVEINSTANCE", "ABOUT TO SAVEINSTANCE");
+		savedInstanceState.putString("saved", editURI.getText().toString());
+		super.onSaveInstanceState(savedInstanceState);	
+	}
+	
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);	
+		Log.i("ONRESTORESAVEINSTANCE", "ABOUT TO RESTORE");
 
+		editURI.setText(savedInstanceState.getString("saved"));
+		
+		MovieProvider provider = new MovieProvider();
+		Cursor myCursor = provider.query(Uri.parse(editURI.getText().toString()),MovieProvider.MovieData.PROJECTION, null, null,"ASC");
+		if (myCursor != null) {
+			int count = myCursor.getCount();
+			Log.i("CURSOR", String.valueOf(count));
+			if (count > 0) {
+				movieArrayList = new ArrayList<HashMap<String, String>>();
+
+				while (myCursor.moveToNext()) {
+					HashMap<String, String> displayMap = new HashMap<String, String>();
+					displayMap.put("Title", myCursor.getString(1));
+					displayMap.put("Year", myCursor.getString(2));
+					displayMap.put("Rating", myCursor.getString(3));
+
+					movieArrayList.add(displayMap);
+				}
+
+				adapter = new SimpleAdapter(context,
+						movieArrayList, R.layout.latestmovies_row,
+						from, to);
+				listView.setAdapter(adapter);
+			} else {
+				listView = null;
+				Toast.makeText(context, "No movies found.",
+						Toast.LENGTH_LONG).show();
+				Log.i("CURSOR", "CURSOR IS 0");
+			}
+		} else {
+			Toast.makeText(context, "No movies found.",
+					Toast.LENGTH_LONG).show();
+		}	
+	}
+
+	
 }

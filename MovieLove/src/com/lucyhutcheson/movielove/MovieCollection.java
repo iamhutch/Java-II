@@ -4,7 +4,6 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.lucyhutcheson.lib.MovieCollector;
 import com.lucyhutcheson.lib.MovieProvider;
 
 import android.app.Activity;
@@ -26,8 +25,6 @@ public class MovieCollection extends Activity implements OnClickListener {
 	private Button searchButton;
 	private ListView listView;
 	private View listHeader;
-	//private TextView searchInfo;
-	MovieCollector collector;
 	
 	private ArrayList<HashMap<String, String>> myList = new ArrayList<HashMap<String, String>>();
 	
@@ -47,11 +44,6 @@ public class MovieCollection extends Activity implements OnClickListener {
 
 		this.setContentView(R.layout.latestmovieslist);
 
-		try {
-			collector = new MovieCollector(this);
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
 		
 		// GET TEXT AND INITALIZE DATA
 		editURI = (EditText) this.findViewById(R.id.searchField);

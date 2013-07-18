@@ -29,5 +29,6 @@
     <string name="title">Title</string>
     <string name="filter_latest_movies">Filter Latest Movies</string>
     <string name="enter_uri">Enter URI</string>
+    <string name="no_movies_found_">No movies found.</string>
     
 </resources>

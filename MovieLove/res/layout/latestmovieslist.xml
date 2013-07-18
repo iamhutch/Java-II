@@ -39,6 +39,15 @@
             android:layout_width="fill_parent"
             android:layout_height="377dp" >
         </ListView>
+
+        <TextView
+            android:id="@+id/empty"
+            style="@android:style/TextAppearance.Large"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:text="@string/no_movies_found_" >
+        </TextView>
     </LinearLayout>
 
     <LinearLayout
@@ -59,14 +68,12 @@
             android:layout_height="wrap_content"
             android:text="@string/go" />
     </LinearLayout>
-    
-    
+
     <Button
         android:id="@+android:id/activity_list_btn"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:onClick="backButton"
         android:text="@string/back_to_main_view" />
-
 
 </LinearLayout>

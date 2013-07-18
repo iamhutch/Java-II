@@ -49,7 +49,6 @@ public class MoviesActivity extends Activity implements OnClickListener {
 	ListView listView;
 	EditText editURI;
 	Button searchButton;
-	ArrayList<HashMap<String, String>> movieArrayList = new ArrayList<HashMap<String, String>>();
 	String[] from = new String[] { "Title", "Year", "Rating" };
 	int[] to = new int[] { R.id.movietitle, R.id.year, R.id.rating };
 	SimpleAdapter adapter;
@@ -99,15 +98,16 @@ public class MoviesActivity extends Activity implements OnClickListener {
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(editURI.getWindowToken(), 0);
 
+		
 		// Handle communication between this activity and DownloadService class
 		Handler dataServiceHandler = new Handler() {
 
 			public void handleMessage(Message mymessage) {
 
 				if (mymessage.arg1 == RESULT_OK && mymessage.obj != null) {
+					
 					try {
 						Log.i("RESPONSE", mymessage.obj.toString());
-						// displayData();
 					} catch (Exception e) {
 						Log.e("ERROR", e.toString());
 					}
@@ -117,8 +117,9 @@ public class MoviesActivity extends Activity implements OnClickListener {
 					if (myCursor != null) {
 						int count = myCursor.getCount();
 						Log.i("CURSOR", String.valueOf(count));
-
 						if (count > 0) {
+							ArrayList<HashMap<String, String>> movieArrayList = new ArrayList<HashMap<String, String>>();
+
 							while (myCursor.moveToNext()) {
 								HashMap<String, String> displayMap = new HashMap<String, String>();
 								displayMap.put("Title", myCursor.getString(1));

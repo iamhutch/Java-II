@@ -33,7 +33,8 @@ public class MovieProvider extends ContentProvider {
 
 	public static class MovieData implements BaseColumns {
 
-		public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/movies");
+		public static final Uri CONTENT_URI = Uri.parse("content://"
+				+ AUTHORITY + "/movies");
 
 		public static final String CONTENT_TYPE = "vnd.ndroid.cursor.dir/vnd.lucyhutcheson.movielove.item";
 		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.lucyhutcheson.movielove.item";
@@ -43,7 +44,8 @@ public class MovieProvider extends ContentProvider {
 		public static final String YEAR_COLUMN = "YEAR";
 		public static final String RATING_COLUMN = "RATING";
 
-		public static final String[] PROJECTION = { "_Id", MOVIE_COLUMN, YEAR_COLUMN, RATING_COLUMN };
+		public static final String[] PROJECTION = { "_Id", MOVIE_COLUMN,
+				YEAR_COLUMN, RATING_COLUMN };
 
 		private MovieData() {
 		};
@@ -55,14 +57,15 @@ public class MovieProvider extends ContentProvider {
 	public static final int ITEMS_YEAR_FILTER = 3;
 	public static final int ITEMS_RATING_FILTER = 4;
 
-	private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+	private static final UriMatcher uriMatcher = new UriMatcher(
+			UriMatcher.NO_MATCH);
 
-    // Add  URI "match" entries
+	// Add URI "match" entries
 	static {
 		uriMatcher.addURI(AUTHORITY, "movies/", ITEMS);
 		uriMatcher.addURI(AUTHORITY, "movies/#", ITEMS_ID);
 		uriMatcher.addURI(AUTHORITY, "movies/year/*", ITEMS_YEAR_FILTER);
-		uriMatcher.addURI(AUTHORITY, "movies/place/*", ITEMS_RATING_FILTER);
+		uriMatcher.addURI(AUTHORITY, "movies/rating/*", ITEMS_RATING_FILTER);
 	}
 
 	@Override
@@ -98,15 +101,14 @@ public class MovieProvider extends ContentProvider {
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {
-		
+
 		MatrixCursor result = new MatrixCursor(projection);
 		Log.i("MOVIE PROVIDER RESULT", result.toString());
 
 		MoviesSingletonClass _Movies = MoviesSingletonClass.getInstance();
 		String JSONString = _Movies.get_movies();
 		Log.i("MOVIE PROVIDER", JSONString);
-		
-		
+
 		JSONObject movie = null;
 		JSONArray movieArray = null;
 		JSONObject field = null;
@@ -122,90 +124,75 @@ public class MovieProvider extends ContentProvider {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		// If there is not data to return, just return the cursor
-		if (movieArray == null)
-		{
+		if (movieArray == null) {
 			Log.e("QUERY", "NULL");
 			return result;
 		}
-				
+		Log.i("URIMATCHER SWITCH", uri.toString());
+		
 		switch (uriMatcher.match(uri)) {
 		case ITEMS:
-			
-			for (int i= 0; i<movieArray.length(); i++)
-			{
+
+			for (int i = 0; i < movieArray.length(); i++) {
 				try {
 					Log.i("TRYING URIMATCHER", "IN TRY");
 					field = movieArray.getJSONObject(i);
-					Log.i("TRYING URIMATCHER FIELD", field.toString());
+					// Log.i("TRYING URIMATCHER FIELD", field.toString());
 
-					result.addRow(new Object[] {i+1, field.get(DownloadService.JSON_TITLE),
-							field.get(DownloadService.JSON_YEAR), field.get(DownloadService.JSON_RATING)});
-					Log.i("TRYING URIMATCHER RESULT ADD ROW", result.toString());
-	
+					result.addRow(new Object[] { i + 1,
+							field.get(DownloadService.JSON_TITLE),
+							field.get(DownloadService.JSON_YEAR),
+							field.get(DownloadService.JSON_RATING) });
+					// Log.i("TRYING URIMATCHER RESULT ADD ROW",
+					// result.toString());
+
 				} catch (Exception e) {
 					// TODO: handle exception
 				}
 			}
 			break;
-		case ITEMS_ID:
-			String itemId = uri.getLastPathSegment();
-			Log.i("QUERYID", itemId);
-			
-			int index;
-			// Make sure the the index is a correct integer
-			try {
-				index = Integer.parseInt(itemId);
-			} catch (Exception e) {
-				Log.e("ERROR QUERY", "INDEX FORMAT ERROR");
-				break;
-			}
-			
-			if (index<=0 || index > movieArray.length()) {
-				Log.e("QUERY", "INDEX OUT OF RANGE FOR " + uri.toString());
-				break;
-			}
-			try {
-				field = movieArray.getJSONObject(index-1);
-				result.addRow(new Object[] {index, field.get(DownloadService.JSON_TITLE),
-						field.get(DownloadService.JSON_YEAR), field.get(DownloadService.JSON_RATING)});
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			
-			break;
-			case ITEMS_YEAR_FILTER:
+		case ITEMS_YEAR_FILTER:
 			String yearRequested = uri.getLastPathSegment();
+			Log.i("ITEMS_YEAR_FILTER", yearRequested);
+
+			Log.i("MOVIE ARRAY LENGTH", String.valueOf(movieArray.length()));
 			
 			for (int i = 0; i < movieArray.length(); i++) {
 				try {
-					field = movieArray.getJSONObject(i).getJSONObject(MovieCollector.JSON_FIELDS);
-					
-					if (field.getString(MovieCollector.JSON_YEAR).contentEquals(yearRequested)){
-						result.addRow(new Object[] {i+1, field.get(MovieCollector.JSON_TITLE),
-								field.get(MovieCollector.JSON_YEAR), field.get(MovieCollector.JSON_RATING)});
+					field = movieArray.getJSONObject(i);
+					Log.i("ITEMS_YEAR_FILTER FIELD", field.toString());
+
+					if (field.getString(DownloadService.JSON_YEAR)
+							.contentEquals(yearRequested)) {
+						result.addRow(new Object[] { i + 1,
+								field.get(DownloadService.JSON_TITLE),
+								field.get(DownloadService.JSON_YEAR),
+								field.get(DownloadService.JSON_RATING) });
 					}
 				} catch (Exception e) {
 					// TODO: handle exception
 					e.printStackTrace();
 				}
 			}
-			
+
 			break;
-			
+
 		case ITEMS_RATING_FILTER:
 			String ratingRequested = uri.getLastPathSegment();
-			
+			Log.i("ITEMS_RATING_FILTER", ratingRequested);
+
 			for (int i = 0; i < movieArray.length(); i++) {
 				try {
-					field = movieArray.getJSONObject(i).getJSONObject(MovieCollector.JSON_FIELDS);
-					
-					if (field.getString(MovieCollector.JSON_RATING).contentEquals(ratingRequested)){
-						result.addRow(new Object[] {i+1, field.get(MovieCollector.JSON_TITLE),
-								field.get(MovieCollector.JSON_YEAR), field.get(MovieCollector.JSON_RATING)});
+					field = movieArray.getJSONObject(i);
+
+					if (field.getString(DownloadService.JSON_RATING)
+							.contentEquals(ratingRequested)) {
+						result.addRow(new Object[] { i + 1,
+								field.get(DownloadService.JSON_TITLE),
+								field.get(DownloadService.JSON_YEAR),
+								field.get(DownloadService.JSON_RATING) });
 					}
 				} catch (Exception e) {
 					// TODO: handle exception
@@ -213,12 +200,11 @@ public class MovieProvider extends ContentProvider {
 				}
 			}
 			break;
-			
+
 		default:
 			Log.e("QUERY", "INVALID URI + " + uri.toString());
-	
+
 		}
-		
 
 		// TODO Auto-generated method stub
 		return result;

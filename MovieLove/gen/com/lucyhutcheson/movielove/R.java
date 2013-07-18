@@ -33,7 +33,7 @@ public final class R {
         public static final int _rating=0x7f080007;
         public static final int _synopsis=0x7f08000a;
         public static final int _year=0x7f080008;
-        public static final int action_settings=0x7f08001a;
+        public static final int action_settings=0x7f08001c;
         public static final int activity_list_btn=0x01010000;
         public static final int addFavButton=0x7f08000c;
         public static final int clearButton=0x7f080019;
@@ -47,12 +47,14 @@ public final class R {
         public static final int listview=0x7f080014;
         public static final int main=0x7f080011;
         public static final int mainlayout=0x7f080000;
-        public static final int movieCollectorLayout=0x7f080015;
+        public static final int movieCollectorLayout=0x7f080017;
         public static final int movieData=0x7f080006;
         public static final int movietitle=0x7f080002;
         public static final int rating=0x7f080010;
-        public static final int searchButton=0x7f080017;
-        public static final int searchField=0x7f080016;
+        public static final int searchButton=0x7f080016;
+        public static final int searchField=0x7f080015;
+        public static final int searchLatest=0x7f08001a;
+        public static final int searchLatestButton=0x7f08001b;
         public static final int textView1=0x7f08000b;
         public static final int viewLatest=0x7f08000d;
         public static final int year=0x7f08000f;
@@ -64,7 +66,8 @@ public final class R {
         public static final int latestmovieslist=0x7f030003;
         public static final int moviecollector=0x7f030004;
         public static final int searchform=0x7f030005;
-        public static final int splash=0x7f030006;
+        public static final int searchlatestbutton=0x7f030006;
+        public static final int splash=0x7f030007;
     }
     public static final class menu {
         public static final int main=0x7f070000;
@@ -78,8 +81,10 @@ public final class R {
         public static final int clear_screen=0x7f05000b;
         public static final int critics_rating=0x7f050007;
         public static final int enter_movie_name=0x7f050003;
+        public static final int enter_uri=0x7f05001b;
         public static final int favorites=0x7f050011;
         public static final int favs=0x7f050005;
+        public static final int filter_latest_movies=0x7f05001a;
         public static final int go=0x7f050004;
         public static final int hello_world=0x7f050002;
         public static final int latest_movies=0x7f050016;

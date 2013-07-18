@@ -16,20 +16,25 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.lucyhutcheson.lib.DownloadService;
+import com.lucyhutcheson.lib.MovieProvider;
 import com.lucyhutcheson.lib.MoviesSingletonClass;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -46,6 +51,8 @@ public class MoviesActivity extends Activity {
 	// Setup variables
 	Context context = this;
 	ListView listView;
+	EditText editURI;
+	Button searchButton;
 
 	/*
 	 * (non-Javadoc)
@@ -64,6 +71,19 @@ public class MoviesActivity extends Activity {
 		View listHeader = this.getLayoutInflater().inflate(R.layout.latestmovies_header, null);
 		listView.addHeaderView(listHeader);
 
+		// GET TEXT AND INITALIZE DATA
+		editURI = (EditText) this.findViewById(R.id.searchField);
+		editURI.setText(MovieProvider.MovieData.CONTENT_URI.toString());
+
+		// SEARCH BUTTON AND HANDLER
+		searchButton = (Button) this.findViewById(R.id.searchButton);
+		//searchButton.setOnClickListener(this);
+
+		// DISMISS THE KEYBOARD SO WE CAN SEE OUR TEXT
+		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(((EditText) findViewById(R.id.searchField)).getWindowToken(), 0);
+
+
 		// Handle communication between this activity and DownloadService class
 		Handler dataServiceHandler = new Handler() {
 
@@ -72,10 +92,16 @@ public class MoviesActivity extends Activity {
 				if (mymessage.arg1 == RESULT_OK && mymessage.obj != null) {
 					try {
 						Log.i("RESPONSE", mymessage.obj.toString());
-						displayData();
+						//displayData();
 					} catch (Exception e) {
 						Log.e("ERROR", e.toString());
 					}
+					
+					MovieProvider provider = new MovieProvider();
+					//Cursor myCursor = provider.query(MovieProvider.MovieData.CONTENT_URI, MovieProvider.MovieData.PROJECTION, null, null, "ASC");
+					//if (myCursor != null) {
+						//Log.i("CURSOR", String.valueOf(myCursor.getCount()));
+					//}
 				}
 			}
 		};
@@ -85,18 +111,6 @@ public class MoviesActivity extends Activity {
 		startServiceIntent.putExtra(DownloadService.MESSENGER_KEY, messenger);
 		startService(startServiceIntent);
 
-		listView.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> adapterView, View view,
-					int position, long id)
-
-			{
-				// When clicked, show a toast with the TextView text
-				Toast.makeText(getApplicationContext(),
-						((TextView) view).getText(),
-
-						Toast.LENGTH_SHORT).show();
-			}
-		});
 	}
 
 	/**
@@ -117,8 +131,8 @@ public class MoviesActivity extends Activity {
 			String[] from = new String[] { "Title", "Year", "Rating" };
 			int[] to = new int[] { R.id.movietitle, R.id.year, R.id.rating };
 
-			// Add just the latest 10 movies to my array list
-			for (int i = 0; i < 10; i++) {
+			// Add just the latest 20 movies to my array list
+			for (int i = 0; i < 15; i++) {
 				JSONObject movieObject = singleMovies.getJSONObject(i);
 				String title = movieObject.getString("title");
 				String year = movieObject.getString("year");
@@ -132,8 +146,7 @@ public class MoviesActivity extends Activity {
 				movieArrayList.add(displayMap);
 			}
 
-			SimpleAdapter adapter = new SimpleAdapter(this, movieArrayList,
-					R.layout.latestmovies_row, from, to);
+			SimpleAdapter adapter = new SimpleAdapter(this, movieArrayList,R.layout.latestmovies_row, from, to);
 			listView.setAdapter(adapter);
 
 		} catch (Exception e) {

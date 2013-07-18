@@ -27,5 +27,7 @@
     <string name="waiting_for_movie_data">Waiting for movie data</string>
     <string name="movie">Movie</string>
     <string name="title">Title</string>
+    <string name="filter_latest_movies">Filter Latest Movies</string>
+    <string name="enter_uri">Enter URI</string>
     
 </resources>

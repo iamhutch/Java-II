@@ -30,19 +30,17 @@ public class MovieProvider extends ContentProvider {
 
 	public static class MovieData implements BaseColumns {
 
-		public static final Uri CONTENT_URI = Uri.parse("content://"
-				+ AUTHORITY + "/movies");
+		public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/movies");
 
-		public static final String CONTENT_TYPE = "vnd.ndroid.cursor.dir/vnd.dgardinier.museum.item";
-		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.dgardinier.museum.item";
+		public static final String CONTENT_TYPE = "vnd.ndroid.cursor.dir/vnd.lucyhutcheson.movielove.item";
+		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.lucyhutcheson.movielove.item";
 
 		// Define Columns
 		public static final String MOVIE_COLUMN = "TITLE";
 		public static final String YEAR_COLUMN = "YEAR";
 		public static final String RATING_COLUMN = "RATING";
 
-		public static final String[] PROJECTION = { "_Id", MOVIE_COLUMN,
-				YEAR_COLUMN, RATING_COLUMN };
+		public static final String[] PROJECTION = { "_Id", MOVIE_COLUMN, YEAR_COLUMN, RATING_COLUMN };
 
 		private MovieData() {
 		};
@@ -54,10 +52,9 @@ public class MovieProvider extends ContentProvider {
 	public static final int ITEMS_YEAR_FILTER = 3;
 	public static final int ITEMS_RATING_FILTER = 4;
 
+	private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
-	private static final UriMatcher uriMatcher = new UriMatcher(
-			UriMatcher.NO_MATCH);
-
+    // Add  URI "match" entries
 	static {
 		uriMatcher.addURI(AUTHORITY, "movies/", ITEMS);
 		uriMatcher.addURI(AUTHORITY, "movies/#", ITEMS_ID);
@@ -163,7 +160,7 @@ public class MovieProvider extends ContentProvider {
 
 			
 			break;
-		case ITEMS_YEAR_FILTER:
+			/*case ITEMS_YEAR_FILTER:
 			String yearRequested = uri.getLastPathSegment();
 			
 			for (int i = 0; i < movieArray.length(); i++) {
@@ -198,7 +195,7 @@ public class MovieProvider extends ContentProvider {
 					e.printStackTrace();
 				}
 			}
-			break;
+			break;*/
 			
 		default:
 			Log.e("QUERY", "INVALID URI + " + uri.toString());

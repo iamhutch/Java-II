@@ -18,7 +18,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 
 public class MovieCollection extends Activity implements OnClickListener {
 	
@@ -27,7 +26,7 @@ public class MovieCollection extends Activity implements OnClickListener {
 	private Button searchButton;
 	private ListView listView;
 	private View listHeader;
-	private TextView searchInfo;
+	//private TextView searchInfo;
 	MovieCollector collector;
 	
 	private ArrayList<HashMap<String, String>> myList = new ArrayList<HashMap<String, String>>();
@@ -64,9 +63,7 @@ public class MovieCollection extends Activity implements OnClickListener {
 
 		// DISMISS THE KEYBOARD SO WE CAN SEE OUR TEXT
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.hideSoftInputFromWindow(
-				((EditText) findViewById(R.id.searchField))
-						.getWindowToken(), 0);
+		imm.hideSoftInputFromWindow(((EditText) findViewById(R.id.searchField)).getWindowToken(), 0);
 		
 		//searchInfo = (TextView) this.findViewById(R.id.searchTextView);
 		
@@ -74,6 +71,7 @@ public class MovieCollection extends Activity implements OnClickListener {
 		listView = (ListView) findViewById(R.id.listview);
 		listHeader = getLayoutInflater().inflate(R.layout.latestmovies_header, null);
 		listView.addHeaderView(listHeader);
+		
 
 		String[] from = new String[] { "Title", "Year", "Rating" };
 		int[] to = new int[] { R.id.movietitle, R.id.year, R.id.rating };

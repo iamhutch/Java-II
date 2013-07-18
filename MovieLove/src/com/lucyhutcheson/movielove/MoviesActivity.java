@@ -53,7 +53,11 @@ public class MoviesActivity extends Activity {
 	ListView listView;
 	EditText editURI;
 	Button searchButton;
-
+	ArrayList<HashMap<String, String>> movieArrayList = new ArrayList<HashMap<String, String>>();
+	String[] from = new String[] { "Title", "Year", "Rating" };
+	int[] to = new int[] { R.id.movietitle, R.id.year, R.id.rating };
+	SimpleAdapter adapter;	
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -81,7 +85,7 @@ public class MoviesActivity extends Activity {
 
 		// DISMISS THE KEYBOARD SO WE CAN SEE OUR TEXT
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.hideSoftInputFromWindow(((EditText) findViewById(R.id.searchField)).getWindowToken(), 0);
+		imm.hideSoftInputFromWindow(editURI.getWindowToken(), 0);
 
 
 		// Handle communication between this activity and DownloadService class
@@ -98,10 +102,29 @@ public class MoviesActivity extends Activity {
 					}
 					
 					MovieProvider provider = new MovieProvider();
-					//Cursor myCursor = provider.query(MovieProvider.MovieData.CONTENT_URI, MovieProvider.MovieData.PROJECTION, null, null, "ASC");
-					//if (myCursor != null) {
-						//Log.i("CURSOR", String.valueOf(myCursor.getCount()));
-					//}
+					Cursor myCursor = provider.query(MovieProvider.MovieData.CONTENT_URI, MovieProvider.MovieData.PROJECTION, null, null, "ASC");
+					if (myCursor != null) {
+						int count = myCursor.getCount();
+						Log.i("CURSOR", String.valueOf(count));
+						
+						if (count > 0) {
+							while (myCursor.moveToNext()) {
+								HashMap<String, String> displayMap = new HashMap<String, String>();
+								displayMap.put("Title", myCursor.getString(1));
+								displayMap.put("Year", myCursor.getString(2));
+								displayMap.put("Rating", myCursor.getString(3));
+
+								movieArrayList.add(displayMap);
+							}
+							
+							adapter = new SimpleAdapter(context, movieArrayList, R.layout.latestmovies_row, from, to);
+							listView.setAdapter(adapter);
+						} else {
+							Log.i("CURSOR", "CURSOR IS 0");
+						}
+					} else {
+						Toast.makeText(context, "Cursor is null", Toast.LENGTH_LONG).show();
+					}
 				}
 			}
 		};
@@ -113,47 +136,7 @@ public class MoviesActivity extends Activity {
 
 	}
 
-	/**
-	 * Display data.
-	 */
-	public void displayData() {
 
-		MoviesSingletonClass _Movies = MoviesSingletonClass.getInstance();
-		ArrayList<HashMap<String, String>> movieArrayList = new ArrayList<HashMap<String, String>>();
-		String JSONString = _Movies.get_movies();
-		JSONObject movies = null;
-		JSONArray singleMovies = null;
-
-		try {
-
-			movies = new JSONObject(JSONString);
-			singleMovies = movies.getJSONArray("movies");
-			String[] from = new String[] { "Title", "Year", "Rating" };
-			int[] to = new int[] { R.id.movietitle, R.id.year, R.id.rating };
-
-			// Add just the latest 20 movies to my array list
-			for (int i = 0; i < 15; i++) {
-				JSONObject movieObject = singleMovies.getJSONObject(i);
-				String title = movieObject.getString("title");
-				String year = movieObject.getString("year");
-				String mpaa_rating = movieObject.getString("mpaa_rating");
-
-				HashMap<String, String> displayMap = new HashMap<String, String>();
-				displayMap.put("Title", title);
-				displayMap.put("Year", year);
-				displayMap.put("Rating", mpaa_rating);
-
-				movieArrayList.add(displayMap);
-			}
-
-			SimpleAdapter adapter = new SimpleAdapter(this, movieArrayList,R.layout.latestmovies_row, from, to);
-			listView.setAdapter(adapter);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
 
 	/**
 	 * Back button intent

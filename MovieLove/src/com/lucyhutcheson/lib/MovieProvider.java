@@ -11,6 +11,9 @@
 
 package com.lucyhutcheson.lib;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -96,15 +99,25 @@ public class MovieProvider extends ContentProvider {
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {
 		
-		MatrixCursor result = new MatrixCursor(MovieData.PROJECTION);
+		MatrixCursor result = new MatrixCursor(projection);
+		Log.i("MOVIE PROVIDER RESULT", result.toString());
+
+		MoviesSingletonClass _Movies = MoviesSingletonClass.getInstance();
+		String JSONString = _Movies.get_movies();
+		Log.i("MOVIE PROVIDER", JSONString);
 		
-		String JSONString = FileFunctions.readStringFile(getContext(), "latest", false);
+		
 		JSONObject movie = null;
 		JSONArray movieArray = null;
 		JSONObject field = null;
 		try {
+			Log.i("TRYING MOVIE PROVIDER", "IN TRY");
 			movie = new JSONObject(JSONString);
+			Log.i("TRYING MOVIE PROVIDER", "AFTER JSONOBJECT");
 			movieArray = movie.getJSONArray(DownloadService.JSON_MOVIES);
+			Log.i("TRYING MOVIE PROVIDER", "AFTER JSONARRAY");
+			Log.i("TRYING MOVIE PROVIDER", movieArray.toString());
+
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -123,10 +136,14 @@ public class MovieProvider extends ContentProvider {
 			for (int i= 0; i<movieArray.length(); i++)
 			{
 				try {
-					field = movieArray.getJSONObject(i).getJSONObject(MovieCollector.JSON_FIELDS);
-					result.addRow(new Object[] {i+1, field.get(MovieCollector.JSON_TITLE),
-							field.get(MovieCollector.JSON_YEAR), field.get(MovieCollector.JSON_RATING)});
-					
+					Log.i("TRYING URIMATCHER", "IN TRY");
+					field = movieArray.getJSONObject(i);
+					Log.i("TRYING URIMATCHER FIELD", field.toString());
+
+					result.addRow(new Object[] {i+1, field.get(DownloadService.JSON_TITLE),
+							field.get(DownloadService.JSON_YEAR), field.get(DownloadService.JSON_RATING)});
+					Log.i("TRYING URIMATCHER RESULT ADD ROW", result.toString());
+	
 				} catch (Exception e) {
 					// TODO: handle exception
 				}
@@ -150,9 +167,9 @@ public class MovieProvider extends ContentProvider {
 				break;
 			}
 			try {
-				field = movieArray.getJSONObject(index-1).getJSONObject(MovieCollector.JSON_FIELDS);
-				result.addRow(new Object[] {index, field.get(MovieCollector.JSON_TITLE),
-						field.get(MovieCollector.JSON_YEAR), field.get(MovieCollector.JSON_RATING)});
+				field = movieArray.getJSONObject(index-1);
+				result.addRow(new Object[] {index, field.get(DownloadService.JSON_TITLE),
+						field.get(DownloadService.JSON_YEAR), field.get(DownloadService.JSON_RATING)});
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -160,7 +177,7 @@ public class MovieProvider extends ContentProvider {
 
 			
 			break;
-			/*case ITEMS_YEAR_FILTER:
+			case ITEMS_YEAR_FILTER:
 			String yearRequested = uri.getLastPathSegment();
 			
 			for (int i = 0; i < movieArray.length(); i++) {
@@ -195,7 +212,7 @@ public class MovieProvider extends ContentProvider {
 					e.printStackTrace();
 				}
 			}
-			break;*/
+			break;
 			
 		default:
 			Log.e("QUERY", "INVALID URI + " + uri.toString());

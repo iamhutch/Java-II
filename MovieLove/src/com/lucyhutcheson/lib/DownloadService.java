@@ -36,6 +36,8 @@ public class DownloadService extends IntentService {
 	Context context = this;
 	public static String JSON_MOVIES = "movies";
 	public static String JSON_TITLE = "title";
+	public static String JSON_YEAR = "year";
+	public static String JSON_RATING = "mpaa_rating";
 	public static final String MESSENGER_KEY = "messenger";
 	Messenger messenger;
 	Message message;
@@ -96,14 +98,6 @@ public class DownloadService extends IntentService {
 								.getInstance();
 						mMovies.set_movies(json.toString());
 						
-						try {
-							// SAVE THE DATA TO OUR TEMP FILE FOR INCLUSION IN FAVORITES IF SELECTED BY USER
-							FileFunctions.storeStringFile(this, "latest", json.toString(), true);
-
-						} catch (Exception e) {
-							Log.e("DOWNLOAD SERVICE", "SAVING LATEST ERROR");
-							e.printStackTrace();
-						}
 
 						// SETUP OUR MESSAGE AND SEND
 						message.arg1 = Activity.RESULT_OK;

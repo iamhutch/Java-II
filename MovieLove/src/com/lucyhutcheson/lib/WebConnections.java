@@ -52,8 +52,8 @@ public class WebConnections {
 		try {
 			// Open connection
 			URLConnection conn = url.openConnection();  // open a connection first
+			
 			BufferedInputStream bin = new BufferedInputStream(conn.getInputStream());
-	        Log.i("OPEN CONNECTION", "TRYING");
 			
 			// Execute request
 			byte[] contentBytes = new byte[1024];
@@ -62,10 +62,11 @@ public class WebConnections {
 			while((bytesRead = bin.read(contentBytes)) != -1){
 				response = new String(contentBytes, 0, bytesRead);
 				responseBuffer.append(response);
-			}
-			
+			} 
+			Log.i("BUFFER STRING", responseBuffer.toString());
 			// Return response buffer that has all our data
 			return responseBuffer.toString(); 
+			
 		} catch (Exception e) {
 			// Log if we have any errors
 			Log.e("URL RESPONSE ERROR", "getURLStringResponse: " + e.getLocalizedMessage());

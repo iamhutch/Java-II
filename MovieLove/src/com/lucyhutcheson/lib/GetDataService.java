@@ -58,7 +58,6 @@ public class GetDataService extends IntentService {
 		Log.i("GETDATA SERVICE", "GETDATA SERVICE STARTED");
 		
         String localUrlString = intent.getDataString();
-        Log.i("GETDATA SERVICE", localUrlString);
 		Bundle extras = intent.getExtras();
 		messenger = (Messenger) extras.get(MESSENGER_KEY);
 		message = Message.obtain();
@@ -84,16 +83,29 @@ public class GetDataService extends IntentService {
 
 				try {
 					// GET OUR JSON RESPONSE
-					JSONObject json = new JSONObject(response);
+					JSONObject jsonResult = new JSONObject(response);
+					Log.i("JSON RESPONSE", jsonResult.toString());
 					
 					// NO RESPONSE RECEIVED
-					if (json.getString("total").compareTo("0") == 0) {
+					if (jsonResult.getString("total").compareTo("0") == 0) {
 						Toast toast = Toast.makeText(getApplicationContext(), "Movies Not Found",
 								Toast.LENGTH_SHORT);
 						toast.show();
+						message.arg1 = Activity.RESULT_CANCELED;
+						message.obj = "Movie Not Found";
+						try {
+							messenger.send(message);
+						} catch (RemoteException e) {
+							response = null;
+							message.arg1 = Activity.RESULT_CANCELED;
+							message.obj = "Movie Not Found";
+							Log.i("MESSENGER", "ERROR SENDING MESSAGE");
+							e.printStackTrace();
+						}
+
 					} else {
 						// GET OUR DATA FROM THE JSON ARRAY
-						JSONObject results = json.getJSONArray("movies").getJSONObject(0);
+						JSONObject results = jsonResult.getJSONArray("movies").getJSONObject(0);
 						
 						// SAVE THE DATA TO OUR TEMP FILE FOR INCLUSION IN FAVORITES IF SELECTED BY USER
 						FileFunctions.storeStringFile(getApplicationContext(), "temp", results.toString(), true);
@@ -104,6 +116,9 @@ public class GetDataService extends IntentService {
 						try {
 							messenger.send(message);
 						} catch (RemoteException e) {
+							response = null;
+							message.arg1 = Activity.RESULT_CANCELED;
+							message.obj = "Movie not found";
 							Log.i("MESSENGER", "ERROR SENDING MESSAGE");
 							e.printStackTrace();
 						}
@@ -126,6 +141,7 @@ public class GetDataService extends IntentService {
 		// No network connection available
 		else {
 			message.arg1 = Activity.RESULT_CANCELED;
+			message.obj = "Service completed";
 			Toast toast = Toast.makeText(getApplicationContext(), "No network detected.",
 					Toast.LENGTH_SHORT);
 			toast.show();

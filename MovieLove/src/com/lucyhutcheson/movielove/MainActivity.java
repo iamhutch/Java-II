@@ -100,7 +100,9 @@ public class MainActivity extends Activity {
 	        pDialog.dismiss();
 
 	        if (mymessage.arg1 == RESULT_OK	&& mymessage.obj != null) {
-				Log.i("RESPONSE", mymessage.obj.toString());
+
+		        
+		        Log.i("RESPONSE", mymessage.obj.toString());
 				JSONObject json = null;
 				try {
 					json = new JSONObject(mymessage.obj.toString());
@@ -109,6 +111,9 @@ public class MainActivity extends Activity {
 				}
 				Log.i("UPDATE WITH JSON", json.toString());
 				updateData(json);
+			} else if (mymessage.arg1 == RESULT_CANCELED && mymessage.obj != null){
+				Toast.makeText(MainActivity.this,mymessage.obj.toString(), Toast.LENGTH_LONG).show();
+
 			} else {
 				Toast.makeText(MainActivity.this,"Download failed.", Toast.LENGTH_LONG).show();
 			}
@@ -125,7 +130,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.i("ACTIVITY STARTED", "MoviesActivity has started.");
-
+		
 		// ADD XML LAYOUT
 		setContentView(R.layout.form);
 

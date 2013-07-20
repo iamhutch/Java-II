@@ -30,5 +30,7 @@
     <string name="filter_latest_movies">Filter Latest Movies</string>
     <string name="enter_uri">Enter URI</string>
     <string name="no_movies_found_">No movies found.</string>
+    <string name="view_trailer">View More Info</string>
+    <string name="view_movie_info_on_web">View Movie Info on Web</string>
     
 </resources>

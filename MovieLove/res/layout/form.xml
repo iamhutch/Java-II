@@ -124,4 +124,12 @@
         android:text="@string/view_latest"
         android:textColor="@android:color/white" />
 
+    <Button
+        android:id="@+id/trailerButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/_synopsis"
+        android:text="@string/view_trailer" />
+
 </RelativeLayout>

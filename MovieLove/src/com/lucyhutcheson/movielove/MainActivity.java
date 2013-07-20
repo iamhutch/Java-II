@@ -17,6 +17,7 @@ import java.util.HashMap;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.google.analytics.tracking.android.EasyTracker;
 import com.lucyhutcheson.lib.FileFunctions;
 import com.lucyhutcheson.lib.GetDataService;
 import android.net.Uri;
@@ -26,6 +27,7 @@ import android.os.Message;
 import android.os.Messenger;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -62,17 +64,40 @@ public class MainActivity extends Activity {
 	HashMap<String, String> favList = new HashMap<String, String>();
 	public static final String FAV_FILENAME = "favorites";
 	public static final String TEMP_FILENAME = "temp";
+	private ProgressDialog pDialog;
+	private static final int REQUEST_CODE = 10;
+
+	
+	/**
+	 * GOOGLE ANALYTICS LIBRARY
+	 */
+	@Override
+	public void onStart() {
+		super.onStart();
+		// The rest of your onStart() code.
+		Log.i("GOOGLE ANALYTICS", "START");
+		EasyTracker.getInstance().activityStart(this); // Add this method.
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		// The rest of your onStop() code.
+		Log.i("GOOGLE ANALYTICS", "STOP");
+		EasyTracker.getInstance().activityStop(this); // Add this method.
+	}
 
 	// Handle communication between this activity and
 	// GetDataService class
 	Handler searchServiceHandler = new Handler() {
 
 		public void handleMessage(Message mymessage) {
-			//Object resultObject = mymessage.obj;
 
-			if (mymessage.arg1 == RESULT_OK	&& mymessage.obj != null) {
+			// DISMISS OUR PROGRESS DIALOG
+	        pDialog.dismiss();
+
+	        if (mymessage.arg1 == RESULT_OK	&& mymessage.obj != null) {
 				Log.i("RESPONSE", mymessage.obj.toString());
-				Toast.makeText(MainActivity.this,"Movie Found", Toast.LENGTH_LONG).show();
 				JSONObject json = null;
 				try {
 					json = new JSONObject(mymessage.obj.toString());
@@ -97,6 +122,7 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.i("ACTIVITY STARTED", "MoviesActivity has started.");
 
 		// ADD XML LAYOUT
 		setContentView(R.layout.form);
@@ -122,13 +148,23 @@ public class MainActivity extends Activity {
 				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(_searchField.getWindowToken(), 0);
 
+				// CLEAR OUT ALL FIELDS
+				((TextView) findViewById(R.id._name)).setText("");
+				((TextView) findViewById(R.id._rating)).setText("");
+				((TextView) findViewById(R.id._year)).setText("");
+				((TextView) findViewById(R.id._mpaa)).setText("");
+				((TextView) findViewById(R.id._synopsis)).setText("");
+
+				// SHOW OUR USERS A FRIENDLY DOWNLOADING PROGRESS DIALOG
+			    pDialog = ProgressDialog.show(_context, "Downloading", "Please wait...");
+
 				// GET SEARCHED FOR MOVIE INFORMATION
 				Messenger messenger = new Messenger(searchServiceHandler);
 				Intent startServiceIntent = new Intent(getApplicationContext(),GetDataService.class);
 				startServiceIntent.putExtra(GetDataService.MESSENGER_KEY,messenger);
 				startServiceIntent.putExtra(GetDataService.SEARCH_KEY,_searchField.getText().toString());
 				startServiceIntent.setData(Uri.parse("http://api.rottentomatoes.com/api/public/v1.0/movies.json?apikey=bcqq9h5yxut6nm9qz77h3w3h&page_limit=5&q="
-								+ _searchField.getText().toString()));
+								+ Uri.encode(_searchField.getText().toString())));
 				startService(startServiceIntent);
 
 			}
@@ -162,6 +198,29 @@ public class MainActivity extends Activity {
 			}
 		});
 
+		// VIEW TRAILER BUTTON AND HANDLER
+		Button trailerButton = (Button) findViewById(R.id.trailerButton);
+		trailerButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				_temp = getTemp();
+				String resultsString = null;
+				try {
+					JSONObject results = new JSONObject(_temp);
+					Log.i("TRAILER", results.toString());
+					resultsString = results.toString();
+
+				} catch (JSONException e) {
+					Log.e("JSON", "JSON OBJECT EXCEPTION");
+					e.printStackTrace();
+				}
+
+				Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+				intent.putExtra("data", resultsString);
+				startActivityForResult(intent, REQUEST_CODE);
+			}
+		});
+		
 		// ADD TO FAVORITES BUTTON AND HANDLER
 		Button addButton = (Button) findViewById(R.id.addFavButton);
 		addButton.setOnClickListener(new View.OnClickListener() {
@@ -355,5 +414,16 @@ public class MainActivity extends Activity {
 			Log.e("JSON ERROR", e.toString());
 		}
 	}
+	
+	  @Override
+	  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	    if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+	      if (data.hasExtra("returnSelection")) {
+	        Toast.makeText(this, data.getExtras().getString("returnSelection"),
+	            Toast.LENGTH_SHORT).show();
+	      }
+	    }
+	  }
+
 
 }

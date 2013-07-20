@@ -50,6 +50,7 @@
             android:authorities="com.lucyhutcheson.lib.MovieProvider"
             android:exported="false" >
         </provider>
+        <activity android:name="DetailsActivity"></activity>
     </application>
 
 </manifest>

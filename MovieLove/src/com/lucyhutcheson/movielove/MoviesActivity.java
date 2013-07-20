@@ -13,11 +13,13 @@ package com.lucyhutcheson.movielove;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.google.analytics.tracking.android.EasyTracker;
 import com.lucyhutcheson.lib.DownloadService;
 import com.lucyhutcheson.lib.MovieProvider;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -53,7 +55,25 @@ public class MoviesActivity extends Activity implements OnClickListener {
 	int[] to = new int[] { R.id.movietitle, R.id.year, R.id.rating };
 	SimpleAdapter adapter;
 	ArrayList<HashMap<String, String>> movieArrayList;
+	private ProgressDialog pDialog;
 	
+	/**
+	 * GOOGLE ANALYTICS LIBRARY
+	 */
+	@Override
+	public void onStart() {
+		super.onStart();
+		// The rest of your onStart() code.
+		EasyTracker.getInstance().activityStart(this); // Add this method.
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		// The rest of your onStop() code.
+		EasyTracker.getInstance().activityStop(this); // Add this method.
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -98,6 +118,9 @@ public class MoviesActivity extends Activity implements OnClickListener {
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(editURI.getWindowToken(), 0);
 
+		// SHOW OUR USERS A FRIENDLY DOWNLOADING PROGRESS DIALOG
+	    pDialog = ProgressDialog.show(context, "Downloading", "Please wait...");
+		
 		
 		// Handle communication between this activity and DownloadService class
 		Handler dataServiceHandler = new Handler() {
@@ -106,7 +129,10 @@ public class MoviesActivity extends Activity implements OnClickListener {
 
 				if (mymessage.arg1 == RESULT_OK && mymessage.obj != null) {
 					
-					try {
+					// DISMISS OUR PROGRESS DIALOG
+			        pDialog.dismiss();
+
+			        try {
 						Log.i("RESPONSE", mymessage.obj.toString());
 					} catch (Exception e) {
 						Log.e("ERROR", e.toString());

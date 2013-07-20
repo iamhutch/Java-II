@@ -6,6 +6,5 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="lib" path="libs/libGoogleAnalyticsV2.jar"/>
-	<classpathentry kind="lib" path="/Users/admin/Downloads/android-smart-image-view-1.0.0.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

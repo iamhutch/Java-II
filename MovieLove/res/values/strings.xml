@@ -32,5 +32,6 @@
     <string name="no_movies_found_">No movies found.</string>
     <string name="view_trailer">View More Info</string>
     <string name="view_movie_info_on_web">View Movie Info on Web</string>
+    <string name="message_to_display_on_main_activity">Message to display on main activity</string>
     
 </resources>

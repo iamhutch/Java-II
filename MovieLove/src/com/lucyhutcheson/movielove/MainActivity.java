@@ -69,7 +69,7 @@ public class MainActivity extends Activity {
 
 	
 	/**
-	 * GOOGLE ANALYTICS LIBRARY
+	 * GOOGLE ANALYTICS LIBRARY.
 	 */
 	@Override
 	public void onStart() {
@@ -79,6 +79,9 @@ public class MainActivity extends Activity {
 		EasyTracker.getInstance().activityStart(this); // Add this method.
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onStop()
+	 */
 	@Override
 	public void onStop() {
 		super.onStop();
@@ -102,7 +105,6 @@ public class MainActivity extends Activity {
 				try {
 					json = new JSONObject(mymessage.obj.toString());
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				Log.i("UPDATE WITH JSON", json.toString());
@@ -198,16 +200,16 @@ public class MainActivity extends Activity {
 			}
 		});
 
-		// VIEW TRAILER BUTTON AND HANDLER
-		Button trailerButton = (Button) findViewById(R.id.trailerButton);
-		trailerButton.setOnClickListener(new OnClickListener() {
+		// VIEW MOVIE INFO BUTTON AND HANDLER
+		Button movieInfoButton = (Button) findViewById(R.id.trailerButton);
+		movieInfoButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				// GET JSON DATA THAT WAS STORED INTO TEMP FROM OUR SEARCH
 				_temp = getTemp();
 				String resultsString = null;
 				try {
 					JSONObject results = new JSONObject(_temp);
-					Log.i("TRAILER", results.toString());
 					resultsString = results.toString();
 
 				} catch (JSONException e) {
@@ -215,6 +217,7 @@ public class MainActivity extends Activity {
 					e.printStackTrace();
 				}
 
+				// START EXPLICIT INTENT AND PASS OUR JSON DATA
 				Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
 				intent.putExtra("data", resultsString);
 				startActivityForResult(intent, REQUEST_CODE);
@@ -414,16 +417,19 @@ public class MainActivity extends Activity {
 			Log.e("JSON ERROR", e.toString());
 		}
 	}
-	
-	  @Override
-	  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-	    if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
-	      if (data.hasExtra("returnSelection")) {
-	        Toast.makeText(this, data.getExtras().getString("returnSelection"),
-	            Toast.LENGTH_SHORT).show();
-	      }
-	    }
-	  }
 
+	/**
+	 * Receives dynamic user message from Explicit Intent, DetailsActivity.java 
+	 */
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+			if (data.hasExtra("returnMessage")) {
+				Toast.makeText(this,
+						data.getExtras().getString("returnMessage"),
+						Toast.LENGTH_LONG).show();
+			}
+		}
+	}
 
 }

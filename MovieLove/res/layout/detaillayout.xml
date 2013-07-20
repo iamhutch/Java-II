@@ -53,9 +53,21 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-         android:padding="15dp"
-        android:textColor="@android:color/white"
-         android:background="@android:color/holo_orange_dark"
-        android:text="@string/view_movie_info_on_web" />
-    
-</RelativeLayout> 
+        android:background="@android:color/holo_orange_dark"
+        android:padding="15dp"
+        android:text="@string/view_movie_info_on_web"
+        android:textColor="@android:color/white" />
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/backButton"
+        android:hint="@string/message_to_display_on_main_activity"
+        android:layout_marginBottom="14dp"
+        android:ems="10" >
+
+        <requestFocus />
+    </EditText>
+
+</RelativeLayout>

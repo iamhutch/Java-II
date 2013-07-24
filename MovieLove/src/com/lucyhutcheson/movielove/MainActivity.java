@@ -132,7 +132,7 @@ public class MainActivity extends Activity {
 		Log.i("ACTIVITY STARTED", "MoviesActivity has started.");
 		
 		// ADD XML LAYOUT
-		setContentView(R.layout.formfrag);
+		setContentView(R.layout.form);
 
 		// SETUP VARIABLES AND VALUES
 		_context = this;

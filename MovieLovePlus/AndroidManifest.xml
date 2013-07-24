@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.lucyhutcheson.movielove"
+    android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="17" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
+        <activity
+            android:name="com.lucyhutcheson.movielove.SplashActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lucyhutcheson.movielove.MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
+        </activity>
+        <activity android:name="favorites" >
+        </activity>
+        <activity
+            android:name="com.lucyhutcheson.movielove.MoviesActivity"
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
+
+        <service android:name="com.lucyhutcheson.lib.DownloadService" >
+        </service>
+        <service android:name="com.lucyhutcheson.lib.GetDataService" >
+        </service>
+
+        <provider
+            android:name="com.lucyhutcheson.lib.MovieProvider"
+            android:authorities="com.lucyhutcheson.lib.MovieProvider"
+            android:exported="false" >
+        </provider>
+    </application>
+
+</manifest>

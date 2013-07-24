@@ -42,8 +42,8 @@ public final class R {
         public static final int _synopsis=0x7f09000e;
         public static final int _year=0x7f09000c;
         public static final int action_settings=0x7f09001d;
-        public static final int activity_list_btn=0x01010000;
         public static final int addFavButton=0x7f090010;
+        public static final int backbutton=0x7f09001a;
         public static final int clearButton=0x7f090005;
         public static final int favSpinner=0x7f090009;
         public static final int form_frag=0x7f090012;
@@ -56,7 +56,6 @@ public final class R {
         public static final int listview=0x7f090019;
         public static final int main=0x7f090017;
         public static final int mainlayout=0x7f090000;
-        public static final int movieCollectorLayout=0x7f09001a;
         public static final int movieData=0x7f09000a;
         public static final int movietitle=0x7f090006;
         public static final int rating=0x7f090016;
@@ -75,10 +74,8 @@ public final class R {
         public static final int latestmovies_header=0x7f030003;
         public static final int latestmovies_row=0x7f030004;
         public static final int latestmovieslist=0x7f030005;
-        public static final int moviecollector=0x7f030006;
-        public static final int searchform=0x7f030007;
-        public static final int searchlatestbutton=0x7f030008;
-        public static final int splash=0x7f030009;
+        public static final int searchlatestbutton=0x7f030006;
+        public static final int splash=0x7f030007;
     }
     public static final class menu {
         public static final int main=0x7f080000;
@@ -102,6 +99,7 @@ public final class R {
         public static final int go=0x7f040005;
         public static final int hello_world=0x7f040003;
         public static final int latest_movies=0x7f040017;
+        public static final int load_latest=0x7f040021;
         public static final int message_to_display_on_main_activity=0x7f040020;
         public static final int movie=0x7f040019;
         public static final int movie_name=0x7f040007;

@@ -16,6 +16,7 @@ import java.util.HashMap;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.lucyhutcheson.lib.DownloadService;
 import com.lucyhutcheson.lib.MovieProvider;
+import com.lucyhutcheson.movielove.LatestFragment.LatestListener;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -44,7 +45,7 @@ import android.widget.Toast;
  * activity.
  */
 @SuppressLint("HandlerLeak")
-public class MoviesActivity extends Activity {
+public class MoviesActivity extends Activity implements LatestListener {
 
 	// Setup variables
 	Context context = this;
@@ -86,34 +87,15 @@ public class MoviesActivity extends Activity {
 		Log.i("ACTIVITY STARTED", "MoviesActivity has started.");
 
 		// Setup our content view
-		this.setContentView(R.layout.latestmovieslist);
+		setContentView(R.layout.latestfrag);
 		listView = (ListView) findViewById(R.id.listview);
-		View listHeader = this.getLayoutInflater().inflate(
-				R.layout.latestmovies_header, null);
-		listView.addHeaderView(listHeader);
-
-		Messenger messenger = new Messenger(dataServiceHandler);
-		Intent startServiceIntent = new Intent(context, DownloadService.class);
-		startServiceIntent.putExtra(DownloadService.MESSENGER_KEY, messenger);
-		startService(startServiceIntent);
-
-		// SHOW OUR USERS A FRIENDLY DOWNLOADING PROGRESS DIALOG
-	    pDialog = ProgressDialog.show(context, "Downloading", "Please wait...");
+		//View listHeader = this.getLayoutInflater().inflate(R.layout.latestmovies_header, null);
+		//listView.addHeaderView(listHeader);
+		
 
 	}
 
-	/**
-	 * Back button intent
-	 * 
-	 * @param button
-	 *            the button
-	 */
-	public void backButton(View button) {
-		Intent intent = new Intent(this, MainActivity.class);
-		startActivity(intent);
-	}
 
-	
 	
 	
 	// Handle communication between this activity and DownloadService class
@@ -167,7 +149,24 @@ public class MoviesActivity extends Activity {
 		}
 	};
 
+	@Override
+	public void onLoadLatest() {
+		Messenger messenger = new Messenger(dataServiceHandler);
+		Intent startServiceIntent = new Intent(context, DownloadService.class);
+		startServiceIntent.putExtra(DownloadService.MESSENGER_KEY, messenger);
+		startService(startServiceIntent);
 	
+		// SHOW OUR USERS A FRIENDLY DOWNLOADING PROGRESS DIALOG
+	    pDialog = ProgressDialog.show(context, "Downloading", "Please wait...");
+	}
+
+	@Override
+	public void onBackButton() {
+		Intent intent = new Intent(this, MainActivity.class);
+		startActivity(intent);
+	}
+
+	/*
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		Log.i("ONSAVEINSTANCE", "ABOUT TO SAVEINSTANCE");
@@ -213,7 +212,7 @@ public class MoviesActivity extends Activity {
 			Toast.makeText(context, "No movies found.",
 					Toast.LENGTH_LONG).show();
 		}	
-	}
+	}*/
 
 	
 }

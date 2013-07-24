@@ -13,10 +13,17 @@
 
         <TextView
             android:id="@+id/latestmoviesheader"
-            android:layout_width="fill_parent"
+            android:layout_width="0dp"
             android:layout_height="fill_parent"
+            android:layout_weight="1"
             android:text="@string/latest_movies"
             android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/searchButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/load_latest" />
     </LinearLayout>
 
     <!-- List Divider -->
@@ -26,6 +33,38 @@
         android:layout_height="1dip"
         android:background="?android:attr/listDivider" />
 
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_red_dark"
+        android:padding="10dp" >
+
+        <TextView
+            android:id="@+id/movietitle"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="@string/title"
+            android:textStyle="bold"
+            android:width="450dp" />
+
+        <TextView
+            android:id="@+id/year"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="@string/year"
+            android:textStyle="bold"
+            android:width="80dp" />
+
+        <TextView
+            android:id="@+id/rating"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="@string/rating"
+            android:textStyle="bold"
+            android:width="80dp" />
+    </LinearLayout>
     <!-- ListView (latestmovies_row) -->
 
     <ListView
@@ -36,10 +75,9 @@
     </ListView>
 
     <Button
-        android:id="@+android:id/activity_list_btn"
-        android:layout_width="fill_parent"
+        android:id="@+id/backbutton"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="backButton"
         android:text="@string/back_to_main_view" />
 
 </LinearLayout>

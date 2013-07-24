@@ -30,9 +30,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
 import android.util.Log;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -83,21 +80,13 @@ public class MoviesActivity extends Activity implements LatestListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		Log.i("ACTIVITY STARTED", "MoviesActivity has started.");
 
 		// Setup our content view
 		setContentView(R.layout.latestfrag);
-		listView = (ListView) findViewById(R.id.listview);
-		//View listHeader = this.getLayoutInflater().inflate(R.layout.latestmovies_header, null);
-		//listView.addHeaderView(listHeader);
-		
-
+		listView =  (ListView) findViewById(R.id.listview);
 	}
-
-
-	
-	
+		
 	// Handle communication between this activity and DownloadService class
 	Handler dataServiceHandler = new Handler() {
 

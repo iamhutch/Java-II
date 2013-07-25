@@ -10,12 +10,14 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:contentDescription="@string/background"
-        android:scaleType="fitCenter"
+        android:scaleType="center"
         android:src="@drawable/background" />
 
     <LinearLayout
         android:id="@+id/linearLayout1"
-        style="@style/MovieMaster.SearchForm" >
+        style="@style/MovieMaster.SearchForm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
 
         <EditText
             android:id="@+id/searchField"
@@ -73,30 +75,44 @@
 
         <TextView
             style="@style/MovieMaster.MovieLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/critics_rating" />
 
         <TextView
             android:id="@+id/_rating"
-            style="@style/MovieMaster.MovieInfo" />
+            style="@style/MovieMaster.MovieInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <TextView
             style="@style/MovieMaster.MovieLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/year" />
 
         <TextView
             android:id="@+id/_year"
-            style="@style/MovieMaster.MovieInfo" />
+            style="@style/MovieMaster.MovieInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <TextView
             style="@style/MovieMaster.MovieLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/rating" />
 
         <TextView
             android:id="@+id/_mpaa"
-            style="@style/MovieMaster.MovieInfo" />
+            style="@style/MovieMaster.MovieInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <TextView
             style="@style/MovieMaster.MovieLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/synopsis" />
     </GridLayout>
 
@@ -119,25 +135,41 @@
         android:paddingTop="35dp"
         android:text="@string/movie_planner" />
 
-    <Button
-        android:id="@+id/addFavButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/viewFavButton"
-        android:layout_marginBottom="10dp"
-        android:background="@android:color/holo_orange_dark"
-        android:padding="10dp"
-        android:text="@string/add_to_favorites"
-        android:textColor="@android:color/white" />
-
-    <Button
-        android:id="@+id/viewFavButton"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:padding="10dp"
-        android:text="@string/view_favorites" />
+        android:baselineAligned="false" >
+
+        <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+
+            <Button
+                android:id="@+id/addFavButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@android:color/holo_orange_dark"
+                android:padding="10dp"
+                android:text="@string/add_to_favorites"
+                android:textColor="@android:color/white" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+
+            <Button
+                android:id="@+id/viewFavButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@string/view_favorites" />
+        </RelativeLayout>
+    </LinearLayout>
 
     <Button
         android:id="@+id/viewLatest"

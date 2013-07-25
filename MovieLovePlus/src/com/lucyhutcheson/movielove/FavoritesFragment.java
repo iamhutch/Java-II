@@ -62,7 +62,6 @@ public class FavoritesFragment extends Fragment {
 		_listAdapter = new ArrayAdapter<String>(getActivity(),
 				android.R.layout.simple_list_item_1, _movies);
 		list.setAdapter(_listAdapter);
-		Log.i("FAV FRAGMENT", "SET LIST ADAPTER");
 
 		// LIST INTERACTION
 		list.setOnItemClickListener(new OnItemClickListener() {

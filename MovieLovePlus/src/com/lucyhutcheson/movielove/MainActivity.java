@@ -77,6 +77,7 @@ public class MainActivity extends Activity implements MainFragment.FormListener,
 	@Override
 	public void onStop() {
 		super.onStop();
+		_temp = null;
 		// The rest of your onStop() code.
 		Log.i("GOOGLE ANALYTICS", "STOP");
 		EasyTracker.getInstance().activityStop(this); // Add this method.
@@ -129,6 +130,7 @@ public class MainActivity extends Activity implements MainFragment.FormListener,
 		_context = this;
 		_temp = getTemp();
 		_favorites = FileFunctions.readStringFile(_context, "favoritestring", true);
+		_searchField = (EditText) this.findViewById(R.id.searchField);
 
 	}
 
@@ -148,7 +150,9 @@ public class MainActivity extends Activity implements MainFragment.FormListener,
 	 * Clear out the edit fields and text views for future use.
 	 * 
 	 * @param clearTemp
-	 *            the clear temp
+	 *            Determines whether to clear out all fields
+	 *            including _temp field, which holds our most
+	 *            recent searched-for movie.
 	 */
 	private void clearFields(Boolean clearTemp) {
 		((EditText) findViewById(R.id.searchField)).setText("");
@@ -196,6 +200,8 @@ public class MainActivity extends Activity implements MainFragment.FormListener,
 	public void updateData(JSONObject data) {
 		Log.i("UPDATE DATA", data.toString());
 		try {
+			((EditText) findViewById(R.id.searchField)).setText(data
+					.getString("title"));
 			((TextView) findViewById(R.id._name)).setText(data
 					.getString("title"));
 			((TextView) findViewById(R.id._rating)).setText(data.getJSONObject(
@@ -213,7 +219,9 @@ public class MainActivity extends Activity implements MainFragment.FormListener,
 	}
 	
 	/**
-	 * FORM FRAGMENT METHODS
+	 * FORM FRAGMENT METHODS.
+	 *
+	 * @param movie the movie
 	 */
 
 	@Override
@@ -232,6 +240,9 @@ public class MainActivity extends Activity implements MainFragment.FormListener,
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see com.lucyhutcheson.movielove.MainFragment.FormListener#onLatestList()
+	 */
 	@Override
 	public void onLatestList() {
 		// INTENT TO START MAIN ACTIVITY
@@ -241,6 +252,9 @@ public class MainActivity extends Activity implements MainFragment.FormListener,
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see com.lucyhutcheson.movielove.MainFragment.FormListener#onAddFavorite()
+	 */
 	@Override
 	public void onAddFavorite() {
 		// CHECK IF THERE IS A MOVIE TO SAVE BY CHECKING THE NAME
@@ -271,6 +285,9 @@ public class MainActivity extends Activity implements MainFragment.FormListener,
 		}		
 	}
 
+	/* (non-Javadoc)
+	 * @see com.lucyhutcheson.movielove.MainFragment.FormListener#onClear()
+	 */
 	@Override
 	public void onClear() {
 		// DISMISS THE KEYBOARD SO WE CAN SEE OUR TEXT
@@ -282,6 +299,9 @@ public class MainActivity extends Activity implements MainFragment.FormListener,
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see com.lucyhutcheson.movielove.MainFragment.FormListener#onFavoritesList()
+	 */
 	@Override
 	public void onFavoritesList() {
 
@@ -293,7 +313,11 @@ public class MainActivity extends Activity implements MainFragment.FormListener,
 	
 
 	/**
-	 * Receives dynamic user message from Explicit Intent, FavoritesActivity.java 
+	 * Receives dynamic user message from Explicit Intent, FavoritesActivity.java
+	 *
+	 * @param requestCode the request code
+	 * @param resultCode the result code
+	 * @param data the data
 	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -308,12 +332,38 @@ public class MainActivity extends Activity implements MainFragment.FormListener,
 	}
 
 	/**
-	 * FAVORITES FRAGMENT METHODS
+	 * FAVORITES FRAGMENT METHODS.
+	 *
+	 * @param movie the movie
 	 */
 
 	@Override
 	public void onFavoriteSelected(String movie) {
 		onMovieSearch(movie);
+	}
+
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onSaveInstanceState(android.os.Bundle)
+	 */
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		savedInstanceState.putString("saved", _searchField.getText().toString());
+		super.onSaveInstanceState(savedInstanceState);	
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onRestoreInstanceState(android.os.Bundle)
+	 */
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);	
+		if (savedInstanceState.containsKey("saved")){
+			if (savedInstanceState.getString("saved").length()>0) {
+				_searchField.setText(savedInstanceState.getString("saved"));
+				onMovieSearch(savedInstanceState.getString("saved"));
+			}
+		}
 	}
 
 

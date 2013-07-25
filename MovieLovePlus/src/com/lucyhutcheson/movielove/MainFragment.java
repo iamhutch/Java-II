@@ -34,7 +34,6 @@ public class MainFragment extends Fragment {
 		super.onCreateView(inflater, container, savedInstanceState);
 		Log.i("MAIN FRAGMENT", "FRAGMENT STARTED");
 		View view = inflater.inflate(R.layout.form, container, false);
-		Log.i("MAIN FRAGMENT", "LAYOUT INFLATED");
 		
 		// SEARCH BUTTON AND HANDLER
 		Button searchButton = (Button) view.findViewById(R.id.searchButton);
@@ -73,9 +72,7 @@ public class MainFragment extends Fragment {
 		latestButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Log.i("LATEST BUTTON", "LATEST BUTTON CLICKED");
 				listener.onLatestList();
-
 			}
 		});
 

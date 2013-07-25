@@ -19,6 +19,7 @@ public class MainFragment extends Fragment {
 
 	// Calling activity
 	private FormListener listener;
+	EditText _searchField;
 	
 	public interface FormListener {
 		public void onMovieSearch(String movie);
@@ -29,18 +30,37 @@ public class MainFragment extends Fragment {
 	}
 	
 	@Override
+	public void onAttach(Activity activity){
+		super.onAttach(activity);
+		
+		try {
+			// CAST ACTIVITY TO FORMLISTENER
+			listener = (FormListener) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString() + " must implement FormListener");
+		}
+	}
+
+	@Override 
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+	}
+
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		super.onCreateView(inflater, container, savedInstanceState);
 		Log.i("MAIN FRAGMENT", "FRAGMENT STARTED");
 		View view = inflater.inflate(R.layout.form, container, false);
-		
+		_searchField = (EditText) getActivity().findViewById(R.id.searchField);
+
+
 		// SEARCH BUTTON AND HANDLER
 		Button searchButton = (Button) view.findViewById(R.id.searchButton);
 		searchButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				EditText _searchField = (EditText) getActivity().findViewById(R.id.searchField);
 
 				// DISMISS THE KEYBOARD SO WE CAN SEE OUR TEXT
 				InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -97,16 +117,5 @@ public class MainFragment extends Fragment {
 		return view;
 	}
 	
-	@Override
-	public void onAttach(Activity activity){
-		super.onAttach(activity);
-		
-		try {
-			// CAST ACTIVITY TO FORMLISTENER
-			listener = (FormListener) activity;
-		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString() + " must implement FormListener");
-		}
-	}
 	
 }

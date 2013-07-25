@@ -1,183 +1,188 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/mainlayout"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
-
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:contentDescription="@string/background"
-        android:scaleType="center"
-        android:src="@drawable/background" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout1"
-        style="@style/MovieMaster.SearchForm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
-
-        <EditText
-            android:id="@+id/searchField"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="@string/enter_movie_name" />
-
-        <Button
-            android:id="@+id/searchButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/go" />
-
-        <Button
-            android:id="@+id/clearButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/clear_screen" />
-    </LinearLayout>
+    android:layout_height="match_parent" >
 
     <RelativeLayout
-        android:id="@+id/movietitle"
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="110dp" >
+        android:id="@+id/mainlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
 
         <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:id="@+id/imageView1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:contentDescription="@string/background"
-            android:scaleType="fitXY"
-            android:src="@drawable/bg_moviename" />
+            android:scaleType="center"
+            android:src="@drawable/background" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            style="@style/MovieMaster.SearchForm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <EditText
+                android:id="@+id/searchField"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/enter_movie_name" />
+
+            <Button
+                android:id="@+id/searchButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/go" />
+
+            <Button
+                android:id="@+id/clearButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/clear_screen" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/movietitle"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="110dp" >
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:contentDescription="@string/background"
+                android:scaleType="fitXY"
+                android:src="@drawable/bg_moviename" />
+
+            <TextView
+                android:id="@+id/_name"
+                style="@style/MovieMaster.MovieTitle"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="23dp"
+                android:gravity="center" />
+        </RelativeLayout>
+
+        <GridLayout
+            android:id="@+id/movieData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/movietitle"
+            android:columnCount="2"
+            android:padding="10dip" >
+
+            <TextView
+                style="@style/MovieMaster.MovieLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/critics_rating" />
+
+            <TextView
+                android:id="@+id/_rating"
+                style="@style/MovieMaster.MovieInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                style="@style/MovieMaster.MovieLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/year" />
+
+            <TextView
+                android:id="@+id/_year"
+                style="@style/MovieMaster.MovieInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                style="@style/MovieMaster.MovieLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/rating" />
+
+            <TextView
+                android:id="@+id/_mpaa"
+                style="@style/MovieMaster.MovieInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                style="@style/MovieMaster.MovieLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/synopsis" />
+        </GridLayout>
 
         <TextView
-            android:id="@+id/_name"
-            style="@style/MovieMaster.MovieTitle"
+            android:id="@+id/_synopsis"
+            style="@style/MovieMaster.MovieInfo"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="23dp"
-            android:gravity="center" />
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/movieData"
+            android:paddingRight="10dp" />
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="false"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:paddingTop="35dp"
+            android:text="@string/movie_planner" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:baselineAligned="false" >
+
+            <RelativeLayout
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
+
+                <Button
+                    android:id="@+id/addFavButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:background="@android:color/holo_orange_dark"
+                    android:padding="10dp"
+                    android:text="@string/add_to_favorites"
+                    android:textColor="@android:color/white" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
+
+                <Button
+                    android:id="@+id/viewFavButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="@string/view_favorites" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/viewLatest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/holo_red_dark"
+            android:padding="7dp"
+            android:text="@string/view_latest"
+            android:textColor="@android:color/white" />
     </RelativeLayout>
 
-    <GridLayout
-        android:id="@+id/movieData"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/movietitle"
-        android:columnCount="2"
-        android:padding="10dip" >
-
-        <TextView
-            style="@style/MovieMaster.MovieLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/critics_rating" />
-
-        <TextView
-            android:id="@+id/_rating"
-            style="@style/MovieMaster.MovieInfo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            style="@style/MovieMaster.MovieLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/year" />
-
-        <TextView
-            android:id="@+id/_year"
-            style="@style/MovieMaster.MovieInfo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            style="@style/MovieMaster.MovieLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/rating" />
-
-        <TextView
-            android:id="@+id/_mpaa"
-            style="@style/MovieMaster.MovieInfo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            style="@style/MovieMaster.MovieLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/synopsis" />
-    </GridLayout>
-
-    <TextView
-        android:id="@+id/_synopsis"
-        style="@style/MovieMaster.MovieInfo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/movieData"
-        android:paddingRight="10dp" />
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="false"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        android:paddingTop="35dp"
-        android:text="@string/movie_planner" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:baselineAligned="false" >
-
-        <RelativeLayout
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" >
-
-            <Button
-                android:id="@+id/addFavButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:background="@android:color/holo_orange_dark"
-                android:padding="10dp"
-                android:text="@string/add_to_favorites"
-                android:textColor="@android:color/white" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" >
-
-            <Button
-                android:id="@+id/viewFavButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="@string/view_favorites" />
-        </RelativeLayout>
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/viewLatest"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/holo_red_dark"
-        android:padding="7dp"
-        android:text="@string/view_latest"
-        android:textColor="@android:color/white" />
-
-</RelativeLayout>
+</ScrollView>

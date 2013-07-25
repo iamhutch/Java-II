@@ -132,6 +132,7 @@ public class MainActivity extends Activity implements MainFragment.FormListener,
 		_favorites = FileFunctions.readStringFile(_context, "favoritestring", true);
 		_searchField = (EditText) this.findViewById(R.id.searchField);
 
+
 	}
 
 	/*

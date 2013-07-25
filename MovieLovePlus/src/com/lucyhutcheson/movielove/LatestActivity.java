@@ -86,7 +86,8 @@ public class LatestActivity extends Activity implements LatestListener {
 		// Setup our content view
 		setContentView(R.layout.latestfrag);
 		listView =  (ListView) findViewById(R.id.listview);
-		
+		editURI = (EditText) findViewById(R.id.searchField);
+
 
 	}
 		
@@ -107,7 +108,7 @@ public class LatestActivity extends Activity implements LatestListener {
 				}
 
 				MovieProvider provider = new MovieProvider();
-				Cursor myCursor = provider.query(Uri.parse("content://com.lucyhutcheson.movielove.movieprovider/movies"),MovieProvider.MovieData.PROJECTION, null, null,"ASC");
+				Cursor myCursor = provider.query(Uri.parse(_selected),MovieProvider.MovieData.PROJECTION, null, null,"ASC");
 				if (myCursor != null) {
 					int count = myCursor.getCount();
 					Log.i("CURSOR", String.valueOf(count));
@@ -141,20 +142,12 @@ public class LatestActivity extends Activity implements LatestListener {
 		}
 	};
 	
-	/* (non-Javadoc)
-	 * @see android.app.Activity#finish()
-	 */
-	@Override
-	public void finish() {
-		Intent data = new Intent();
-		// RETURN DYNAMIC USER DATA
-		data.putExtra("selectedmovie", _selected);
-		setResult(RESULT_OK, data);
-		super.finish();
-	}
 
 	@Override
-	public void onLoadLatest() {
+	public void onLoadLatest(String URI) {
+		
+		_selected = URI;
+		
 		Messenger messenger = new Messenger(dataServiceHandler);
 		Intent startServiceIntent = new Intent(context, DownloadService.class);
 		startServiceIntent.putExtra(DownloadService.MESSENGER_KEY, messenger);
@@ -168,6 +161,54 @@ public class LatestActivity extends Activity implements LatestListener {
 	public void onBackButton() {
 		Intent intent = new Intent(this, MainActivity.class);
 		startActivity(intent);
+	}
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		if (editURI.getText().toString() != null){
+			Log.i("ONSAVEINSTANCE", "ABOUT TO SAVEINSTANCE: "+editURI.getText().toString());
+			savedInstanceState.putString("saved", editURI.getText().toString());
+		}
+		super.onSaveInstanceState(savedInstanceState);	
+	}
+
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);	
+		Log.i("ONRESTORESAVEINSTANCE", "ABOUT TO RESTORE: "+savedInstanceState.getString("saved"));
+
+		editURI.setText(savedInstanceState.getString("saved"));
+
+		MovieProvider provider = new MovieProvider();
+		Cursor myCursor = provider.query(Uri.parse(editURI.getText().toString()),MovieProvider.MovieData.PROJECTION, null, null,"ASC");
+		if (myCursor != null) {
+			int count = myCursor.getCount();
+			Log.i("CURSOR", String.valueOf(count));
+			if (count > 0) {
+				movieArrayList = new ArrayList<HashMap<String, String>>();
+
+				while (myCursor.moveToNext()) {
+					HashMap<String, String> displayMap = new HashMap<String, String>();
+					displayMap.put("Title", myCursor.getString(1));
+					displayMap.put("Year", myCursor.getString(2));
+					displayMap.put("Rating", myCursor.getString(3));
+
+					movieArrayList.add(displayMap);
+				}
+
+				adapter = new SimpleAdapter(context,
+						movieArrayList, R.layout.latestmovies_row,
+						from, to);
+				listView.setAdapter(adapter);
+			} else {
+				listView = null;
+				Toast.makeText(context, "No movies found.",
+						Toast.LENGTH_LONG).show();
+				Log.i("CURSOR", "CURSOR IS 0");
+			}
+		} else {
+			Toast.makeText(context, "No movies found.",
+					Toast.LENGTH_LONG).show();
+		}	
 	}
 
 	

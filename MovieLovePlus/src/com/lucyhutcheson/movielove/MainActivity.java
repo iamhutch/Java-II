@@ -12,7 +12,6 @@
 package com.lucyhutcheson.movielove;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,6 +19,8 @@ import org.json.JSONObject;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.lucyhutcheson.lib.FileFunctions;
 import com.lucyhutcheson.lib.GetDataService;
+import com.lucyhutcheson.movielove.FavoritesFragment.FavoritesListener;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,32 +33,27 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.Menu;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemSelectedListener;
 
 /**
  * The Class MainActivity which provides access to the search form to search for
  * new movies as well as view any favorite movies that have been saved.
  */
 @SuppressLint("HandlerLeak")
-public class MainActivity extends Activity implements FormFragment.FormListener {
+public class MainActivity extends Activity implements MainFragment.FormListener, FavoritesListener {
 
 	// SETUP VARIABLES FOR CLASS
 	static Context _context;
 	Boolean _connected = false;
-	HashMap<String, String> _favorites;
+	String _favorites;
 	String _temp;
 	EditText _searchField;
 	Spinner _list;
 	ArrayList<String> _movies = new ArrayList<String>();
-	HashMap<String, String> favList = new HashMap<String, String>();
 	public static final String FAV_FILENAME = "favorites";
 	public static final String TEMP_FILENAME = "temp";
 	private ProgressDialog pDialog;
@@ -131,64 +127,9 @@ public class MainActivity extends Activity implements FormFragment.FormListener 
 		
 		// SETUP VARIABLES AND VALUES
 		_context = this;
-		_favorites = getFavorites();
 		_temp = getTemp();
+		_favorites = FileFunctions.readStringFile(_context, "favoritestring", true);
 
-
-		// CREATE SPINNER (DROPDOWN)
-		_list = (Spinner) findViewById(R.id.favSpinner);
-
-		// CREATE ADAPTER FOR MY DROPDOWN
-		ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(_context,
-				android.R.layout.simple_spinner_item, _movies);
-		listAdapter
-				.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-		_list.setAdapter(listAdapter);
-		_list.setOnItemSelectedListener(new OnItemSelectedListener() {
-			// IF A MOVIE IS SELECTED
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View v, int pos,
-					long id) {
-				String str = parent.getItemAtPosition(pos).toString();
-				// MAKE SURE THAT WE AREN'T SELECTING OUR PLACEHOLDER
-				if (!str.equals("View Favorites")) {
-					String selected = favList.get(str);
-					JSONObject json;
-					try {
-						json = new JSONObject(selected);
-						// GET DATA AND DISPLAY ON SCREEN
-						((TextView) findViewById(R.id._name)).setText(json.getString("title"));
-						((TextView) findViewById(R.id._rating)).setText(json.getJSONObject("ratings").getString("critics_score"));
-						((TextView) findViewById(R.id._year)).setText(json.getString("year"));
-						((TextView) findViewById(R.id._mpaa)).setText(json.getString("mpaa_rating"));
-						((TextView) findViewById(R.id._synopsis)).setText(json.getString("critics_consensus"));
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-
-			// IF NO MOVIE IS SELECTED
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
-				Log.i("MOVIE SELECTED", "NONE");
-			}
-		});
-		// UPDATE OUR SPINNER WITH MOVIES
-		updateSaved();
-		listAdapter.notifyDataSetChanged();
-		
-	}
-
-	/**
-	 * Update the saved arraylist with movies.
-	 */
-	public void updateSaved() {
-		favList = getFavorites();
-		_movies.removeAll(_movies);
-		_movies.add("View Favorites");
-		_movies.addAll(favList.keySet());
-		_list.setSelection(0);
 	}
 
 	/*
@@ -219,33 +160,9 @@ public class MainActivity extends Activity implements FormFragment.FormListener 
 		if (clearTemp) {
 			_temp = "";
 		}
-		_list.setSelection(0);
 	}
 
-	/**
-	 * Function to get read the favorites file which contains any movie data
-	 * that was saved as a favorite.
-	 * 
-	 * @return hashmap of our favorites data
-	 */
-	@SuppressWarnings("unchecked")
-	private HashMap<String, String> getFavorites() {
-		Object stored = FileFunctions.readObjectFile(_context, "favorites",
-				false);
-		HashMap<String, String> favorites;
 
-		// CHECK IF OBJECT EXISTS
-		if (stored == null) {
-			Log.i("FAVORITES", "NO FAVORITES FILE FOUND");
-			favorites = new HashMap<String, String>();
-		}
-		// IF OBJECT EXISTS, BRING IN DATA AND ADD TO HASHMAP
-		else {
-			// CAST HASHMAP
-			favorites = (HashMap<String, String>) stored;
-		}
-		return favorites;
-	}
 
 	/**
 	 * Gets our temp string from the storage and returns it. The temp string
@@ -294,20 +211,6 @@ public class MainActivity extends Activity implements FormFragment.FormListener 
 			Log.e("JSON ERROR", e.toString());
 		}
 	}
-
-	/**
-	 * Receives dynamic user message from Explicit Intent, DetailsActivity.java 
-	 */
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
-			if (data.hasExtra("returnMessage")) {
-				Toast.makeText(this,
-						data.getExtras().getString("returnMessage"),
-						Toast.LENGTH_LONG).show();
-			}
-		}
-	}
 	
 	/**
 	 * FORM FRAGMENT METHODS
@@ -332,38 +235,38 @@ public class MainActivity extends Activity implements FormFragment.FormListener 
 	@Override
 	public void onLatestList() {
 		// INTENT TO START MAIN ACTIVITY
-		Intent intent = new Intent(MainActivity.this,MoviesActivity.class);
+		Intent intent = new Intent(MainActivity.this,LatestActivity.class);
 		MainActivity.this.startActivity(intent);
 		MainActivity.this.finish();		
+		
 	}
 
 	@Override
 	public void onAddFavorite() {
 		// CHECK IF THERE IS A MOVIE TO SAVE BY CHECKING THE NAME
 		// TEXTVIEW VALUE
-		if (((TextView) findViewById(R.id._name)).getText().length() > 0) {
+		String currentMovie = ((TextView) findViewById(R.id._name)).getText().toString();
+		Log.i("ADD FAVORITES", currentMovie);
+		if (currentMovie != null) {
 			// EMPTY OUT OUR FIELDS
 			clearFields(true);
-
-			_temp = getTemp();
-			try {
-				JSONObject results = new JSONObject(_temp);
-				_favorites.put(results.getString("title"), results.toString());
-				FileFunctions.storeObjectFile(_context, FAV_FILENAME, _favorites, false);
-				// ALERT USER OF SUCCESSFUL SAVE
-				Toast toast = Toast.makeText(_context,"Movie successfully added to favorites.",	Toast.LENGTH_SHORT);
-				toast.show();
-				_temp = "";
-			} catch (JSONException e) {
-				Log.e("JSON", "JSON OBJECT EXCEPTION");
-				e.printStackTrace();
+			
+			if (_favorites != null) {
+				_favorites = _favorites.concat(";"+currentMovie);
+				Log.i("ADD FAVORITES IF",_favorites.toString());
+			} else {
+				_favorites = currentMovie;
+				Log.i("ADD FAVORITES ELSE",_favorites.toString());
 			}
-			// UPDATE OUR FAVORITES
-			updateSaved();
+			FileFunctions.storeStringFile(_context, "favoritestring", _favorites, true);
+			// ALERT USER THAT NO MOVIE WAS FOUND
+			Toast toast = Toast.makeText(_context,
+					"Movie successfully saved", Toast.LENGTH_SHORT);
+			toast.show();
 		} else {
 			// ALERT USER THAT NO MOVIE WAS FOUND
 			Toast toast = Toast.makeText(_context,
-					"No movie found to save.", Toast.LENGTH_SHORT);
+					"No movie found to save", Toast.LENGTH_SHORT);
 			toast.show();
 		}		
 	}
@@ -378,5 +281,40 @@ public class MainActivity extends Activity implements FormFragment.FormListener 
 		clearFields(false);
 		
 	}
+
+	@Override
+	public void onFavoritesList() {
+
+		// START EXPLICIT INTENT 
+		Intent intent = new Intent(MainActivity.this, FavoritesActivity.class);
+		startActivityForResult(intent, REQUEST_CODE);
+		
+	}
+	
+
+	/**
+	 * Receives dynamic user message from Explicit Intent, FavoritesActivity.java 
+	 */
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+			if (data.hasExtra("selectedmovie")) {
+				String movie = data.getExtras().getString("selectedmovie");
+				if (movie != null) {
+					onMovieSearch(data.getExtras().getString("selectedmovie"));
+				}
+			}
+		}
+	}
+
+	/**
+	 * FAVORITES FRAGMENT METHODS
+	 */
+
+	@Override
+	public void onFavoriteSelected(String movie) {
+		onMovieSearch(movie);
+	}
+
 
 }

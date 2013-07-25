@@ -176,6 +176,7 @@ public class FileFunctions {
 			return null;
 		}
 		// RETURN OBJECT
+		Log.i("READOBJECT", content.toString());
 		return content;
 	}
 

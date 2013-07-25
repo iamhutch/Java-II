@@ -40,7 +40,7 @@ public class LatestFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		super.onCreateView(inflater, container, savedInstanceState);
-		Log.i("FORMFRAGMENT", "FRAGMENT STARTED");
+		Log.i("LATEST FRAGMENT", "FRAGMENT STARTED");
 		View view =  inflater.inflate(R.layout.latestmovieslist, container, false);
 		
 		// VIEW LATEST MOVIES BUTTON AND HANDLER

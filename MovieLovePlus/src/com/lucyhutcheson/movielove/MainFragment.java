@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class FormFragment extends Fragment {
+public class MainFragment extends Fragment {
 
 	// Calling activity
 	private FormListener listener;
@@ -25,15 +25,16 @@ public class FormFragment extends Fragment {
 		public void onLatestList();
 		public void onAddFavorite();
 		public void onClear();
+		public void onFavoritesList();
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		super.onCreateView(inflater, container, savedInstanceState);
-		Log.i("FORMFRAGMENT", "FRAGMENT STARTED");
+		Log.i("MAIN FRAGMENT", "FRAGMENT STARTED");
 		View view = inflater.inflate(R.layout.form, container, false);
-		Log.i("FORMFRAGMENT", "LAYOUT INFLATED");
+		Log.i("MAIN FRAGMENT", "LAYOUT INFLATED");
 		
 		// SEARCH BUTTON AND HANDLER
 		Button searchButton = (Button) view.findViewById(R.id.searchButton);
@@ -87,6 +88,14 @@ public class FormFragment extends Fragment {
 			}
 		});
 
+		// VIEW MOVIE INFO BUTTON AND HANDLER
+		Button favButton = (Button) view.findViewById(R.id.viewFavButton);
+		favButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				listener.onFavoritesList();
+			}
+		});
 
 		return view;
 	}

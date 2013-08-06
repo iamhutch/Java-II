@@ -20,6 +20,7 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.lucyhutcheson.lib.FileFunctions;
 import com.lucyhutcheson.lib.GetDataService;
 import com.lucyhutcheson.movielove.FavoritesFragment.FavoritesListener;
+import com.lucyhutcheson.movielove.MainFragment.FormListener;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -44,7 +45,7 @@ import android.widget.Toast;
  * new movies as well as view any favorite movies that have been saved.
  */
 @SuppressLint("HandlerLeak")
-public class MainActivity extends Activity implements MainFragment.FormListener, FavoritesListener {
+public class MainActivity extends Activity implements FormListener, FavoritesListener {
 
 	// SETUP VARIABLES FOR CLASS
 	static Context _context;
@@ -132,6 +133,9 @@ public class MainActivity extends Activity implements MainFragment.FormListener,
 		_favorites = FileFunctions.readStringFile(_context, "favoritestring", true);
 		_searchField = (EditText) this.findViewById(R.id.searchField);
 
+		// DISMISS THE KEYBOARD SO WE CAN SEE OUR TEXT
+		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(_searchField.getWindowToken(), 0);
 
 	}
 
@@ -227,6 +231,17 @@ public class MainActivity extends Activity implements MainFragment.FormListener,
 
 	@Override
 	public void onMovieSearch(String movie) {
+		// DISMISS THE KEYBOARD SO WE CAN SEE OUR TEXT
+		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(_searchField.getWindowToken(), 0);
+
+		// CLEAR OUT ALL FIELDS
+		((TextView) findViewById(R.id._name)).setText("");
+		((TextView) findViewById(R.id._rating)).setText("");
+		((TextView) findViewById(R.id._year)).setText("");
+		((TextView) findViewById(R.id._mpaa)).setText("");
+		((TextView) findViewById(R.id._synopsis)).setText("");
+
 		// SHOW OUR USERS A FRIENDLY DOWNLOADING PROGRESS DIALOG
 	    pDialog = ProgressDialog.show(_context, "Downloading", "Please wait...");
 
